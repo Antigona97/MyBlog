@@ -90,17 +90,17 @@
                        </td>
                       <td class="project-actions text-right">
                           <?php if(Session::get('user')['permission'] == "Admin"): ?>
-                          <a href="<?= URL; ?>category/show/<?= $post->id; ?>" class="btn btn-primary btn-sm">
+                          <a href="<?= URL; ?>category/show/<?= $post->url; ?>" class="btn btn-primary btn-sm">
                               <i class="fas fa-folder"></i>View</a>
-                          <a href="<?= URL; ?>dashboard/edit/<?= $post->id; ?>" class="btn btn-info btn-sm">
+                          <a href="<?= URL; ?>dashboard/edit/<?= $post->url; ?>" class="btn btn-info btn-sm">
                               <i class="fas fa-pencil-alt"></i>Edit</a>
-                          <a href="<?= URL; ?>dashboard/delete/<?= $post->id; ?>" class="btn btn-danger btn-sm">
+                          <a href="<?= URL; ?>dashboard/delete/<?= $post->url; ?>" class="btn btn-danger btn-sm">
                               <i class="fas fa-trash"></i>Delete</a>
-                          <?php elseif(Session::get('user')['permission'] == "Editor"): ?><td><a href="<?= URL; ?>category/show/<?= $post->id; ?>" class="btn btn-dark">View</a></td>
-                                <a href="<?= URL; ?>dashboard/edit/<?= $post->id; ?>" class="btn btn-info btn-sm">
+                          <?php elseif(Session::get('user')['permission'] == "Editor"): ?><td><a href="<?= URL; ?>category/show/<?= $post->url; ?>" class="btn btn-dark">View</a></td>
+                                <a href="<?= URL; ?>dashboard/edit/<?= $post->url; ?>" class="btn btn-info btn-sm">
                                     <i class="fas fa-pencil-alt"></i>Edit</a>
                             <?php elseif(Session::get('user')['permission'] == "Guest"): ?>
-                                <a href="<?= URL; ?>category/show/<?= $post->id; ?>" class="btn btn-primary btn-sm">
+                                <a href="<?= URL; ?>category/show/<?= $post->url; ?>" class="btn btn-primary btn-sm">
                                     <i class="fas fa-folder"></i>View</a>
                             <?php endif; ?>
                       </td>

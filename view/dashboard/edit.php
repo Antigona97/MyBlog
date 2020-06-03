@@ -1,77 +1,151 @@
-<?php include 'partial/sidebar.php'; ?>
 <?php
-    
+
     $postErr = isset($this->post_err) ? true : false;
     $postErrMsg = isset($this->post_err) ? $this->post_err : '';
 
 ?>
+<body class="hold-transition sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+    <!-- navbar -->
+  <?php require "partial/layout/top-nav.html";?>
+  <!-- /.navbar -->
+  <?php require "partial/layout/sidebar-menu.html"; ?>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Add post</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Add post</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
 
+    <!-- Main content -->
+    <section class="content">
+        <?php if (is_array($this->posts) ||is_object($this->posts)) {
+        foreach($this->posts as $post) : ?>
+      <form action="<?php echo URL; ?>dashboard/doEdit/<?= $post->id ?>" method="POST" enctype="multipart/form-data">
+        <div class="row">
+          <div class="col-md-9">
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">General</h3>
 
-<div class="col-md-10">
-    <div class="container">
-        <!-- Breadcrumbs-->
-        <h2>Add post</h2>
-
-            <!-- Add post -->
-        <div class="card card-body bg-light mt-4 mb-5">
-<!--        --><?php //if($postErr) : ?>
-<!--            <div class="alert alert-danger alert-dismissible fade show" role="alert">-->
-<!--                --><?//= $postErrMsg ?>
-<!--                <button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
-<!--                    <span aria-hidden="true">&times;</span>-->
-<!--                </button>-->
-<!--            </div>-->
-<!--        --><?php //endif; ?>
-
-        <?php foreach($this->posts as $post) : ?>
-        <form action="<?php echo URL; ?>dashboard/doEdit/<?= $post->id ?>" method="POST" enctype="multipart/form-data">
-
-            <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" name="header" class="form-control form-control-lg" value="<?= $post->header ?>">
-            </div>
-
-            <div class="form-group">
-                <label for="category">Pick a category:</label>
-                <select class="form-control" name="category_id">
-                    <?php foreach ($this->posts as $post): ?>
-                        <option value="<?= $post->id ?>"><?= $post->category_name ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>   
-
-            <input type="hidden" name="file_id" value="<?= $post->file_id ?>">
-            
-            <div class="form-group">
-                <input type="hidden" name="MAX_FILE_SIZE" value="3000000">
-            </div>
-
-            <div class="form-group inputDnD">
-                <label for="title">Current Image:</label>
-                <div>
-                    <img class="" src="<?= URL . $post->thumb ?>" alt="Card image cap">
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i></button>
                 </div>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="inputName">Title</label>
+                  <input type="text" id="inputName" name="header" class="form-control" value="<?= $post->header ?>">
+                </div>
+                <div class="form-group">
+                  <label for="inputDescription">Post Description<sup>*</sup></label>
+                  <textarea id="inputDescription" name="content" class="form-control form-control-lg" rows="12"  <?= $post->content ?>></textarea>
+                </div>
+              </div>
+              <!-- /.card-body -->
             </div>
+            <!-- /.card -->
+          </div>
+          <div class="col-md-3">
+            <div class="card card-secondary">
+              <div class="card-header">
+                <h3 class="card-title">Budget</h3>
 
-            <div class="form-group inputDnD">
-                <label for="title">Upload new Image:</label>
-                <input type="file" class="form-control-file text-upload font-weight-bold" name="new_foto" id="inputFile" onchange="readUrl(this)" data-title="Click or Drag and drop a file">
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i></button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label>Status</label>
+                  <select class="custom-select" name="status">
+                      <option selected><?=$post->status;?></option>
+                      <option>On Hold</option>
+                      <option>Canceled</option>
+                      <option>Success</option>
+                  </select>
+                </div>
+                <div  class="form-group">
+                  <label for="inputTags">Tags</label>
+                  <input name='tags' type="text" id="inputTags" class="form-control"/>
+                </div>
+              </div>
+              <!-- /.card-body -->
             </div>
+            <!-- /.card -->
+            <div class="card card-secondary">
+              <div class="card-header">
+                <h3 class="card-title">Categories</h3>
 
-            <div class="form-group">
-                <label for="body">Your Blog Content:</label>
-                <textarea name="content" rows="15" id="post_text" class="form-control form-control-lg"> <?= $post->content ?> </textarea>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i></button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="inputCategories">All Categories</label><br/>
+                  <select style="width: 100%" id="inputCategories" name="category_id" multiple>
+                      <?php foreach ($this->posts as $post): ?>
+                          <option value="<?= $post->id ?>"><?= $post->category_name ?></option>
+                      <?php endforeach; ?>
+                  </select>
+                </div>
+              </div>
+              <!-- /.card-body -->
             </div>
-            <input type="submit" class="btn btn-success" value="Submit">
-        </form>
-    </div>
-            
-    </div>
-</div>
-<?php endforeach; ?>
+            <!-- /.card -->
+            <div class="card card-secondary">
+              <div class="card-header">
+                <h3 class="card-title">Featured Images</h3>
 
-
-
-
-
-
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i></button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="form-group inputDnD">
+                    <label for="title">Current Image:</label>
+                    <div>
+                        <img class="img-thumbnail" src="<?= URL . $post->thumb ?>" alt="Card image cap">
+                    </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                    <label for="title">Image Upload: <sup>*</sup></label>
+                    <input type="file" class="form-control-file text-upload font-weight-bold" name="post_file" id="inputFile" onchange="readUrl(this)" data-title="Click or Drag and drop a file">
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <a href="#" class="btn btn-secondary">Cancel</a>
+            <input type="submit" value="Create new Post" class="btn btn-success float-right">
+          </div>
+        </div>
+      </form>
+        <?php endforeach; }?>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->

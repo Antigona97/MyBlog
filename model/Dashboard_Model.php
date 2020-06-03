@@ -131,14 +131,17 @@
         }
     
         public function getPosts() {
-            $sql = 'SELECT user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
+            $sql = 'SELECT urls.url, user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
                     FROM user
                     JOIN posts
                     ON user.id = posts.user_id
                     JOIN file
                     ON file.id = posts.file_id
                     JOIN category
-                    ON category.id = posts.category_id ORDER BY timestamp DESC';
+                    ON category.id = posts.category_id
+                    JOIN urls
+                    ON urls.element = posts.id
+                    ORDER BY timestamp DESC';
             
             $obj = $this->db->prepare($sql);
             
@@ -152,7 +155,7 @@
             return false;
         }
     
-        public function getPostById($id) {
+        public function getPostById($url) {
             $sql = "SELECT user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
             FROM user
             JOIN posts
@@ -160,12 +163,15 @@
             JOIN file
             ON file.id = posts.file_id
             JOIN category
-            ON category.id = posts.category_id WHERE posts.id = :id";
+            ON category.id = posts.category_id
+            JOIN urls
+            ON urls.element = posts.id
+            WHERE urls.url = :url";
 
             $obj = $this->db->prepare($sql);
     
             $obj->execute(array(
-                ":id" => $id
+                ":url" => $url
             ));
             
             if($obj->rowCount() > 0) {

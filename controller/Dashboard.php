@@ -2,6 +2,35 @@
     class Dashboard extends Controller {
 
         # **************
+        # Create SEO Url
+        # **************
+        public  function geneterateSEOurl($url, $wordLimit=0)
+        {
+            $separator='-';
+            if($wordLimit != 0){
+                $wordArr = explode(' ', $url);
+                $string = implode(' ', array_slice($wordArr, 0, $wordLimit));
+            }
+
+            $quoteSeparator = preg_quote($separator, '#');
+
+            $trans = array(
+                '&.+?;'                    => '',
+                '[^\w\d _-]'            => '',
+                '\s+'                    => $separator,
+                '('.$quoteSeparator.')+'=> $separator
+            );
+
+            $string = strip_tags($url);
+            foreach ($trans as $key => $val){
+                $string = preg_replace('#'.$key.'#i'.(UTF8_ENABLED ? 'u' : ''), $val, $string);
+            }
+            $string = strtolower($string);
+
+            return trim(trim($string, $separator));
+        }
+
+        # **************
         # Add New Post 
         # **************
         
@@ -155,11 +184,11 @@
             }
         }
 
-        public function edit($id) {
+        public function edit($url) {
             if(!(Session::get('user'))) {
                 Header("Location: " . URL . "home");
             } else {
-                $posts = $this->model->getPostById($id);
+                $posts = $this->model->getPostById($url);
                 $this->view->posts = $posts;
                 $this->view->render('dashboard/edit');
             }
