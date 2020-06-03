@@ -1,27 +1,20 @@
 
 <!-- Header -->
-<header class="masthead">
-    <div class="container">
-        <div class="intro-text">
-            <h4 class="text-uppercase">Get started with digital mindfulness</h4>
-            <div class="intro-heading">Great technology creates focus, joy, and human </br>connection. Find out how.</div>
-            <a class="btn btn-xl text-white text-uppercase" href="<?=URL?>category/showCategory/1">Read More</a><i class="fa fa-angle-right"></i>
-        </div>
-    </div>
-</header>
-
-<section class="section-bg">
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('<?=URL?>public/img/home-bg.jpg')">
+      <?php require "partial/navbar.php";?>
+    <div class="overlay"></div>
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 mx-auto text-center">
-                <h2 class="section-heading">What is Tale Of Mind?</h2>
-                <hr class="dark my-4">
-                <p class="text-faded mb-4">Tale of Mind is for the passionate, the fearless, and the dreamers who believe. For those who are smart, curious, and conscious, with an open mind, a love for learning, and a deep desire to live a brilliant and vibrant life.</p>
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1>My Blog</h1>
+                    <span class="subheading"></span>
+                </div>
             </div>
-            <?php var_dump(URL);?>
         </div>
     </div>
-</section>
+  </header>
 
 <!-- Here comes the main content -->
 <div class="container"> <!-- START: div#content -->

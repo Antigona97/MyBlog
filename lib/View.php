@@ -13,13 +13,13 @@ class View {
             //Prevent double rendering
             $this->rendered = true;
 
-            require 'partial/layout/head.html';
 
             require 'partial/message.php';
 
             require_once 'view/' .$name . '.php';
 
             if(Session::get('controller_name') == 'Dashboard') {
+                require 'partial/layout/head.html';
                 require 'partial/layout/fixed-footer.html';
             }elseif (Session::get('controller_name') =='Home' || Session::get('controller_name') =='Category'){
                 require 'partial/header.php';
