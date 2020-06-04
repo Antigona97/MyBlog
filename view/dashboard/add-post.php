@@ -40,7 +40,7 @@
                 </button>
             </div>
         <?php endif; ?>
-      <form action="<?php echo URL; ?>dashboard/doAdd" method="POST" enctype="multipart/form-data">
+      <form action="<?=URL; ?>dashboard/doAdd" method="POST" enctype="multipart/form-data">
         <div class="row">
           <div class="col-md-9">
             <div class="card card-primary">
@@ -108,7 +108,7 @@
                   <label for="inputCategories">All Categories</label><br/>
                   <select style="width: 100%" id="inputCategories" name="category_id" multiple>
                         <?php foreach ($this->data as $item): ?>
-                          <option value="<?= $item->id ?>"><?= $item->category_name ?></option>
+                          <option value="<?= $item->id ?>"><?= $item->category_name;?></option>
                         <?php endforeach;  ?>
                   </select>
                 </div>
@@ -146,14 +146,3 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <script>
-    $("#inputCategories").change(function() {
-      var id = $(this).children(":selected").attr("id");
-      console.log(id);
-      $.ajax({
-        url:'addpost',
-        data:{'categoryId':id},
-        method:'post'
-      })
-    });
-  </script>

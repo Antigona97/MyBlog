@@ -42,12 +42,12 @@
             $post_content = trim($post['content']);
             $post_file = $_FILES['post_file'];
             $post_status=$post['status'];
-            var_dump($post_status);
+            $url=$this->geneterateSEOurl($post_header);
             $uploadedFile = File::uploadImg($post_file);
-            $this->model->addPost($category_id, $userId, $post_header, $post_content, $uploadedFile, $post_status);
-    
+            $this->model->addPost($category_id, $userId, $post_header, $post_content, $uploadedFile, $post_status, $url);
+
             Message::add('Perfect! New post has been added to your blog');
-            
+
             header('Location: ' . URL . 'dashboard/add');
         }
 
@@ -127,7 +127,7 @@
                 $userData = $this->model->getUserFromEmail($userEmail);
                 $this->view->userData = $userData;
                 $this->view->userImg = $userImgThumb;
-                $this->view->render('dashboard/editProfile');
+                $this->view->render('dashboard/profile');
             }
         }
 
@@ -188,7 +188,7 @@
             if(!(Session::get('user'))) {
                 Header("Location: " . URL . "home");
             } else {
-                $posts = $this->model->getPostById($url);
+                $posts = $this->model->getPostByUrl($url);
                 $this->view->posts = $posts;
                 $this->view->render('dashboard/edit');
             }
@@ -224,12 +224,12 @@
             header('Location: ' . URL . 'home');
         }
 
-        public function delete($id) {
-            $post = $this->model->getPostById($id);
+        public function delete($url) {
+            $post = $this->model->getPostByUrl($url);
             $file_id = $post[0]->file_id;
             
             $this->model->deleteFile($file_id);
-            $this->model->deletePost($id);
+            $this->model->deletePost($url);
             File::delete($post[0]->image);
             File::delete($post[0]->thumb);
 

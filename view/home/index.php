@@ -23,7 +23,8 @@
 <section>
     <div class="card-columns">
 
-<?php foreach($this->post as $item) : ?>
+<?php if(is_array($this->post) || is_object($this->post)){
+foreach($this->post as $item) : ?>
         <div class="card d-none">
             <a href="<?= URL; ?>category/show/<?= $item->id; ?>">
                 <img class="card-img-top" src="<?= $item->image ?>" alt="Card image cap">
@@ -46,7 +47,7 @@
             </div>
         </div>
     
-<?php endforeach; ?>
+<?php endforeach; }?>
     </div>
 
 

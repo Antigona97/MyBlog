@@ -40,10 +40,10 @@ class Category extends Controller {
     # Show Post Functionality
     # ************************
 
-    public function show($id) {
+    public function show($url) {
         # Get all Data needed for post
-        $data = $this->model->getPostById($id);
-        $comments = $this->model->getAllCommentsById($id);
+        $data = $this->model->getPostByUrl($url);
+        $comments = $this->model->getAllCommentsByUrl($url);
 
         # Passing it into the view
         $this->view->data = $data;

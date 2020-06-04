@@ -32,8 +32,7 @@
 
     <!-- Main content -->
     <section class="content">
-        <?php if (is_array($this->posts) ||is_object($this->posts)) {
-        foreach($this->posts as $post) : ?>
+         <?php foreach($this->posts as $post) : ?>
       <form action="<?php echo URL; ?>dashboard/doEdit/<?= $post->id ?>" method="POST" enctype="multipart/form-data">
         <div class="row">
           <div class="col-md-9">
@@ -144,8 +143,8 @@
           </div>
         </div>
       </form>
-        <?php endforeach; }?>
     </section>
+      <?php endforeach; ?>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->

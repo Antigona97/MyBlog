@@ -96,7 +96,8 @@
                               <i class="fas fa-pencil-alt"></i>Edit</a>
                           <a href="<?= URL; ?>dashboard/delete/<?= $post->url; ?>" class="btn btn-danger btn-sm">
                               <i class="fas fa-trash"></i>Delete</a>
-                          <?php elseif(Session::get('user')['permission'] == "Editor"): ?><td><a href="<?= URL; ?>category/show/<?= $post->url; ?>" class="btn btn-dark">View</a></td>
+                          <?php elseif(Session::get('user')['permission'] == "Editor"): ?><td>
+                                <a href="<?= URL; ?>category/show/<?= $post->url; ?>" class="btn btn-dark">View</a></td>
                                 <a href="<?= URL; ?>dashboard/edit/<?= $post->url; ?>" class="btn btn-info btn-sm">
                                     <i class="fas fa-pencil-alt"></i>Edit</a>
                             <?php elseif(Session::get('user')['permission'] == "Guest"): ?>
@@ -115,3 +116,19 @@
     </section>
     <!-- /.content -->
   <!-- /.content-wrapper -->
+      <script>
+          $('.btn btn-danger btn-sm').on('click', function (event) {
+              event.preventDefault();
+              const url = $(this).attr('href');
+              swal({
+                  title: 'Are you sure?',
+                  text: 'This record and it`s details will be permanantly deleted!',
+                  icon: 'warning',
+                  buttons: ["Cancel", "Yes!"],
+              }).then(function(value) {
+                  if (value) {
+                      window.location.href = url;
+                  }
+              });
+          });
+      </script>

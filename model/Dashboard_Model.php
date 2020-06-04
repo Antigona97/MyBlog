@@ -1,6 +1,7 @@
 <?php
     class Dashboard_Model extends Model {
-        public function addPost($category_id, $userId, $post_header, $post_content, $uploadedFile, $status) {
+
+        public function addPost($category_id, $userId, $post_header, $post_content, $uploadedFile, $post_status, $url) {
 
             // 1. Step: insert File ----------------------------------------------------------------------------------------------
             $sql = 'INSERT INTO file (name, image, thumb, size) VALUES (:name, :image, :thumb, :size)';
@@ -20,14 +21,15 @@
     
             // 2. Step: insert Post ----------------------------------------------------------------------------------------------
     
-            $sql = 'INSERT INTO posts(header, content,status, user_id, file_id, category_id) VALUES (:header, :content,:status, :user_id, :file_id, :category_id)';
+            $sql = 'INSERT INTO posts(header, content, status, url, user_id, file_id, category_id) VALUES (:header, :content,:status, :url, :user_id, :file_id, :category_id)';
             
             $obj = $this->db->prepare($sql);
             
             $result2 = $obj->execute(array(
                 ":header" => $post_header,
                 ":content" => $post_content,
-                "status"=>$status,
+                ":status"=>$post_status,
+                ":url" => $url,
                 ":user_id" => $userId,
                 ":file_id" => $file_id,
                 ":category_id" => $category_id,
@@ -83,26 +85,6 @@
             return $result;
         }
 
-        // public function updateUser($user) {
-        //     $password = $user['password'];
-        //     $hashPassword = password_hash($password, PASSWORD_DEFAULT);
-        //     $user['password'] = $hashPassword;
-
-        //     $sql = "UPDATE user SET firstname = :firstname, lastname = :lastname, email = :email, password = :password WHERE id = :id";
-        //     $obj = $this->db->prepare($sql);
-
-        //     $obj->execute(array(
-        //         ":firstname" => $user['firstname'],
-        //         ":lastname" => $user['lastname'],
-        //         ":email" => $user['email'],
-        //         ":email" => $user['email'],
-        //         ":password" => $user['password'],
-        //         ":id" => Session::get('user')['id']
-        //     ));
-
-        // }
-
-
         public function editProfile($user_id, $post_firstname, $post_lastname, $post_email, $post_password) {
 
             $sql = "UPDATE user SET firstname = :firstname, lastname = :lastname, email = :email WHERE id = :id";
@@ -131,7 +113,7 @@
         }
     
         public function getPosts() {
-            $sql = 'SELECT urls.url, user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
+            $sql = 'SELECT user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
                     FROM user
                     JOIN posts
                     ON user.id = posts.user_id
@@ -139,8 +121,6 @@
                     ON file.id = posts.file_id
                     JOIN category
                     ON category.id = posts.category_id
-                    JOIN urls
-                    ON urls.element = posts.id
                     ORDER BY timestamp DESC';
             
             $obj = $this->db->prepare($sql);
@@ -155,7 +135,7 @@
             return false;
         }
     
-        public function getPostById($url) {
+        public function getPostByUrl($url) {
             $sql = "SELECT user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
             FROM user
             JOIN posts
@@ -164,9 +144,7 @@
             ON file.id = posts.file_id
             JOIN category
             ON category.id = posts.category_id
-            JOIN urls
-            ON urls.element = posts.id
-            WHERE urls.url = :url";
+            WHERE url=:url";
 
             $obj = $this->db->prepare($sql);
     
@@ -375,14 +353,14 @@
             return $result;
         }
 
-        public function deletePost($id) {
+        public function deletePost($url) {
 
-            $sql = 'DELETE FROM posts WHERE id = :id LIMIT 1;';
+            $sql = 'DELETE FROM posts WHERE url = :url LIMIT 1;';
     
             $obj = $this->db->prepare($sql);
     
             $result = $obj->execute(array(
-                ':id' => $id
+                ':url' => $url
             ));
     
             return $result;

@@ -1,12 +1,32 @@
-<?php require"$_SERVER[DOCUMENT_ROOT]/public/admin/layout/head.html"; ?>
-<div class="hold-transition sidebar-mini">
+<?php
+    $formClass = isset($this->error) ? 'error' : '';
+
+    $firstnameData = isset($this->formData['firstname']) ? $this->formData['firstname'] : '';
+    $lastnameData = isset($this->formData['lastname']) ? $this->formData['lastname'] : '';
+    $emailData = isset($this->formData['email']) ? $this->formData['email'] : '';
+    $passwordData = isset($this->formData['password']) ? $this->formData['password'] : '';
+    $confirmPasswordData = isset($this->formData['confirm_data']) ? $this->formData['confirm_data'] : '';
+
+    $firstnameErr = isset($this->error['firstname']) ? 'is-invalid' : '';
+    $lastNameErr = isset($this->error['lastname']) ? 'is-invalid' : '';
+    $emailErr = isset($this->error['email']) ? 'is-invalid' : '';
+    $passwordErr = isset($this->error['password']) ? 'is-invalid' : '';
+    $confirmPasswordErr = isset($this->error['confirm_password']) ? 'is-invalid' : '';
+
+    $nameErrorMsg = isset($this->error['name_err']) ? $this->error['name_err'] : '';
+    $lastNameErrorMsg = isset($this->error['lastname_err']) ? $this->error['lastname_err'] : '';
+    $emailErrorMsg = isset($this->error['email_err']) ? $this->error['email_err'] : '';
+    $passwordErrorMsg = isset($this->error['password_err']) ? $this->error['password_err'] : '';
+    $confirmPasswordErrorMsg = isset($this->error['confirm_password_err']) ? $this->error['confirm_password_err'] : '';
+?>
+<body class="hold-transition sidebar-mini">
 <div class="wrapper">
   <!-- Navbar -->
- <?php require "$_SERVER[DOCUMENT_ROOT]/public/admin/layout/top-nav.html"; ?>
+ <?php require "partial/layout/top-nav.html"; ?>
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <?php require"$_SERVER[DOCUMENT_ROOT]/public/admin/layout/sidebar-menu.html"; ?>
+  <?php require"partial/layout/sidebar-menu.html"; ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -31,138 +51,51 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-3">
+            <form action="<?php echo URL; ?>dashboard/doUpdateUser" method="POST" enctype="multipart/form-data">
 
-            <!-- Profile Image -->
-            <div class="card card-primary card-outline">
-              <div class="card-body box-profile">
-                <div class="text-center">
-                  <img class="profile-user-img img-fluid img-circle"
-                       src="../../dist/img/user4-128x128.jpg"
-                       alt="User profile picture">
+                <input type="hidden" name="file_id" value="<?= $this->userData['file_id'] ?>">
+
+                <div class="form-group">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="3000000">
                 </div>
 
-                <h3 class="profile-username text-center">Nina Mcintire</h3>
+                <div class="form-group inputDnD">
+                    <label for="title">Image Upload: <sup>*</sup></label>
+                    <input type="file" class="form-control-file text-upload font-weight-bold" name="new_foto" id="inputFile" onchange="readUrl(this)" data-title="Click or Drag and drop a file">
+                </div>
 
-                <p class="text-muted text-center">Software Engineer</p>
+                <div class="form-group">
+                    <label for="title">Firstname: <sup>*</sup></label>
+                    <input type="text" name="firstname" class="form-control form-control-lg <?= $firstnameErr ?>" value="<?= $this->userData['firstname'] ?>">
+                    <span class="invalid-feedback"><?= $nameErrorMsg ?></span>
+                </div>
 
-                <ul class="list-group list-group-unbordered mb-3">
-                  <li class="list-group-item">
-                    <b>Followers</b> <a class="float-right">1,322</a>
-                  </li>
-                  <li class="list-group-item">
-                    <b>Following</b> <a class="float-right">543</a>
-                  </li>
-                  <li class="list-group-item">
-                    <b>Friends</b> <a class="float-right">13,287</a>
-                  </li>
-                </ul>
+                <div class="form-group">
+                    <label for="title">Lastname: <sup>*</sup></label>
+                    <input type="text" name="lastname" class="form-control form-control-lg <?= $lastNameErr ?>" value="<?= $this->userData['lastname'] ?>">
+                    <span class="invalid-feedback"><?= $lastNameErrorMsg ?></span>
+                </div>
 
-                <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
+                <div class="form-group">
+                    <label for="title">Email: <sup>*</sup></label>
+                    <input type="text" name="email" class="form-control form-control-lg <?= $emailErr ?>" value="<?= $this->userData['email'] ?>">
+                    <span class="invalid-feedback"><?= $emailErrorMsg ?></span>
+                </div>
 
-            <!-- About Me Box -->
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title">About Me</h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <strong><i class="fas fa-book mr-1"></i> Education</strong>
+                <div class="form-group">
+                    <label for="title">New Password: <sup>*</sup></label>
+                    <input type="password" name="password" Placeholder="Enter your new password" class="form-control form-control-lg <?= $passwordErr ?>">
+                    <span class="invalid-feedback"><?= $passwordErrorMsg ?></span>
+                </div>
 
-                <p class="text-muted">
-                  B.S. in Computer Science from the University of Tennessee at Knoxville
-                </p>
+                <div class="form-group">
+                    <label for="title">Confirm New Password: <sup>*</sup></label>
+                    <input type="password" name="confirm_password" Placeholder="Enter your new password" class="form-control form-control-lg <?= $confirmPasswordErr ?>">
+                    <span class="invalid-feedback"><?= $confirmPasswordErrorMsg ?></span>
+                </div>
 
-                <hr>
-
-                <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
-
-                <p class="text-muted">Malibu, California</p>
-
-                <hr>
-
-                <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
-
-                <p class="text-muted">
-                  <span class="tag tag-danger">UI Design</span>
-                  <span class="tag tag-success">Coding</span>
-                  <span class="tag tag-info">Javascript</span>
-                  <span class="tag tag-warning">PHP</span>
-                  <span class="tag tag-primary">Node.js</span>
-                </p>
-
-                <hr>
-
-                <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
-
-                <p class="text-muted"></p>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-          <div class="col-md-9">
-            <div class="card">
-              <div class="card-header p-2">
-                <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
-                </ul>
-              </div><!-- /.card-header -->
-
-
-                  <div class="tab-pane" id="settings">
-                    <form class="form-horizontal">
-                      <div class="form-group row">
-                        <label for="inputName" class="col-sm-2 col-form-label">Name</label>
-                        <div class="col-sm-10">
-                          <input type="email" class="form-control" id="inputName" placeholder="Name">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-                        <div class="col-sm-10">
-                          <input type="email" class="form-control" id="inputEmail" placeholder="Email">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="inputName2" placeholder="Name">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
-                        <div class="col-sm-10">
-                          <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <div class="offset-sm-2 col-sm-10">
-                          <div class="checkbox">
-                            <label>
-                              <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <div class="offset-sm-2 col-sm-10">
-                          <button type="submit" class="btn btn-danger">Submi</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                  <!-- /.tab-pane -->
+                <input type="submit" class="btn btn-success" value="Update">
+            </form>
                 </div>
                 <!-- /.tab-content -->
               </div><!-- /.card-body -->
@@ -175,12 +108,3 @@
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-</div>
-<!-- ./wrapper -->
-<?php require"$_SERVER[DOCUMENT_ROOT]/public/admin/layout/fixed-footer.html"; ?>
-</div>
-</body>
-</html>
