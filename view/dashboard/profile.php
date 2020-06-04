@@ -96,15 +96,11 @@
 
                 <input type="submit" class="btn btn-success" value="Update">
             </form>
-                </div>
-                <!-- /.tab-content -->
-              </div><!-- /.card-body -->
-            </div>
-            <!-- /.nav-tabs-custom -->
           </div>
-          <!-- /.col -->
-        </div>
         <!-- /.row -->
-      </div><!-- /.container-fluid -->
+        </div>
+      <!-- /.container-fluid -->
+      </div>
     </section>
+  </div>
     <!-- /.content -->

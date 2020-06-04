@@ -19,7 +19,7 @@ class View {
 
             if(Session::get('controller_name') == 'Dashboard' || Session::get('controller_name')=='Auth' || Session::get('controller_name') =='Category') {
                 require 'partial/layout/head.html';
-            }elseif (Session::get('controller_name') =='Home' || Session::get('controller_name') =='Category'){
+            }elseif (Session::get('controller_name') =='Home' || Session::get('controller_name') =='Category' ){
                 require 'partial/header.php';
             }
 
