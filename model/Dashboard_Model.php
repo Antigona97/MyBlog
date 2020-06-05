@@ -261,13 +261,14 @@
             return false;
         }
 
-        public function insertCategory($categoryName, $categoryParent) {
-            $sql = "INSERT INTO category(category_name, parent) VALUES (:category_name, :parent)";
+        public function insertCategory($categoryName, $categoryParent, $url) {
+            $sql = "INSERT INTO category(category_name, parent, url) VALUES (:category_name, :parent, :url)";
             $obj = $this->db->prepare($sql);
     
             $obj->execute(array(
                 ":category_name" => $categoryName,
-                ":parent" => $categoryParent
+                ":parent" => $categoryParent,
+                ":url" => $url
             ));
     
             if($obj->rowCount() > 0) {

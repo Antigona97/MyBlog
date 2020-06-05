@@ -6,7 +6,7 @@ class Navbar extends Controller {
         $newCategories = array();
         
         foreach($categories as $category) {
-            $newCategories[$category['id']] = $category['category_name'];
+            $newCategories[$category['url']] = $category['category_name'];
         }
 
         Session::set('categories', $newCategories);

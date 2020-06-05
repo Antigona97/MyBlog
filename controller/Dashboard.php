@@ -109,7 +109,8 @@
         public function addCategory() {
             $getCategory = $_POST['category'];
             $getParent=$_POST['parent'];
-            $this->model->insertCategory($getCategory, $getParent);
+            $url=$this->geneterateSEOurl($getCategory);
+            $this->model->insertCategory($getCategory, $getParent, $url);
             header("Location: " . URL . "dashboard/category");
         }
 

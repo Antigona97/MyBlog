@@ -44,7 +44,7 @@
           </div>
           <div class="card-body">
             <label>Category Name</label>
-            <input name="name" class="form-control"/>
+            <input name="category" class="form-control"/>
             <label>Parent Category</label>
             <select name="parent" class="custom-select">
               <?php foreach ($this->data as $item): ?>
