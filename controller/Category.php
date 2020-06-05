@@ -7,11 +7,11 @@ class Category extends Controller {
     # Digital Minimalism, Productivity, Mind, Books and Podcasts
     # *************************************************************
 
-    public function showCategory($id) {
-        Session::set('activeCategory', $id);
+    public function showCategory($url) {
+        Session::set('activeCategory', $url);
         $categories = Session::get('categories');
         $search = isset($_GET['search']) ? $_GET['search'] : '';
-        $result = $this->model->getPostsByCategoryId($id, $search);
+        $result = $this->model->getPostsByCategoryId($url, $search);
         $this->view->posts = $result;
 
         $this->view->render('category/showAll');
@@ -36,6 +36,17 @@ class Category extends Controller {
         header("Location: " . URL . "category/show/$postId");
     }
 
+    public function comments(){
+        if(!(Session::get('user'))) {
+            Header("Location: " . URL . "home");
+        } else {
+            $comments=$this->model->getComments();
+            $this->view->comments=$comments;
+
+            $this->view->render('category/comments');
+        }
+    }
+
     # ************************
     # Show Post Functionality
     # ************************
@@ -52,16 +63,6 @@ class Category extends Controller {
         $this->view->render('category/show');
     }
 
-    public function comments(){
-        if(!(Session::get('user'))) {
-            Header("Location: " . URL . "home");
-        } else {
-            $comments=$this->model->getComments();
-            $this->view->comments=$comments;
-
-            $this->view->render('category/comments');
-        }
-    }
 
     public function approved($id){
         $comment=$this->model->approveComment($id);

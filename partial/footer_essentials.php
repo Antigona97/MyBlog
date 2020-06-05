@@ -32,7 +32,8 @@
 <!-- Admin App -->
 <script src="<?=URL?>public/js/adminlte.js"></script>
 <script src="<?=URL?>public/lib/tinymce/tinymce-4.8.1.min.js"></script>
-<script>tinymce.init({selector:'textarea'});</script>
+<script src="<?=URL?>public/js/scripts.js"></script>
+<script>tinymce.init({selector:'#inputDescription'});</script>
 <script>
     $('#myTable').DataTable({ "sPaginationType": "full_numbers" });
     $("#inputCategories").select2({

@@ -1,4 +1,4 @@
-  <header class="masthead" style="background-image: url('<?=URL?>public/img/home-bg.jpg')">
+ <header class="masthead" style="background-image: url('<?=URL?>public/img/home-bg.jpg')">
       <?php require "partial/navbar.php";?>
     <div class="overlay"></div>
     <div class="container">
@@ -27,7 +27,7 @@
                 <p class="card-text mb-0 text-muted"><small><?= $item->category_name ?></small></p>
 
                 <h5 class="card-title"><?= $item->header ?></h5>
-                <p class="card-text"><?= substr($item->content, 0, 100) ?>...<a href="<?= URL; ?>category/show/<?= $item->id; ?>">read more</a></p>
+                <p class="card-text"><?=substr($item->content,0,100)?>...<a href="<?= URL; ?>category/show/<?= $item->id; ?>">read more</a></p>
                 <div class="row">
                     <div class="col">
                         <p class="card-text"><small class="text-muted"><?= $item->timestamp ?></small></p>
@@ -42,18 +42,3 @@
         <?php endforeach;?>
     </div>
 
-    <!-- Pagination start -->
-    <div class="mt-5">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center" id="cardPagination">
-
-            </ul>
-        </nav>
-    </div>
-    </section>
-<script>
-    let activePage = <?= ACTIVE_PAGE ?>;
-    let cardsPerPage = <?= CARDS_PER_PAGE ?>;
-</script>
-
-<script src="<?= URL . "public/js/pagination.js" ?>"></script>

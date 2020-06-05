@@ -6,7 +6,20 @@
     // $index = array_search($activeCategory, );
 
 ?>
-
+ <header class="masthead" style="background-image: url('<?=URL?>public/img/home-bg.jpg')">
+      <?php require "partial/navbar.php";?>
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1>My Blog</h1>
+                    <span class="subheading"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+  </header>
 <div class="container">
 <h1 class="text-center mt-5">Category: <?= $categoryName ?></h1>
 <p class="text-center text-muted mt-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti non inventore vitae erunt quaerat earum. Perspiciatis commodi necessitatibus quasi voluptatum quisquam incidunt qui, quia ipsam, voluptatibus eligendi aperiam reprehenderit sunt ratione alias vel, corrupti laborum deserunt? Culpa, ut minus.</p>
