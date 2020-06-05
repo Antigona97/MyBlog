@@ -52,6 +52,23 @@ class Category extends Controller {
         $this->view->render('category/show');
     }
 
+    public function comments(){
+        if(!(Session::get('user'))) {
+            Header("Location: " . URL . "home");
+        } else {
+            $comments=$this->model->getComments();
+            $this->view->comments=$comments;
+
+            $this->view->render('category/comments');
+        }
+    }
+
+    public function approved($id){
+        $comment=$this->model->approveComment($id);
+        Message::add('Comment approved');
+        header('Location:'.URL.'category/comments');
+    }
+
     # ************************
     # Standard Index Render
     # ************************

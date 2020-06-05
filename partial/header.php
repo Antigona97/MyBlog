@@ -20,4 +20,5 @@
     <!-- Custom scripts for this template -->
 
 </head>
+<body class="hold-transition sidebar-mini">
     <!-- INSERT BODY CONTENT -->

@@ -15,13 +15,14 @@ class View {
 
             require 'partial/message.php';
 
-            require_once 'view/' .$name . '.php';
 
             if(Session::get('controller_name') == 'Dashboard' || Session::get('controller_name')=='Auth' || Session::get('controller_name') =='Category') {
                 require 'partial/layout/head.html';
             }elseif (Session::get('controller_name') =='Home' || Session::get('controller_name') =='Category' ){
                 require 'partial/header.php';
             }
+
+            require_once 'view/' .$name . '.php';
 
             // Check DEBUG_MODE (config)
             if (DEBUG_MODE) {

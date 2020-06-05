@@ -31,10 +31,10 @@ class Home_Model extends Model {
         $obj = $this->db->prepare($sql);
         
         $obj->execute();
-    
-        $data = $obj->rowCount();
-        return $data;
-        
+        if ($obj->rowCount() > 0) {
+            $data = $obj->fetchAll(PDO::FETCH_OBJ);
+            return $data;
+        }
 
         return false;
     }

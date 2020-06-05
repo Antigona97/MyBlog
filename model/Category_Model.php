@@ -73,6 +73,40 @@
             return false;
         }
 
+        public function getComments(){
+            $sql='SELECT posts.header, user.firstname, user.lastname, comments.comment_content, comments.timestamp, comments.id
+                  FROM 
+                  comments 
+                  JOIN 
+                  posts 
+                  on comments.post_id=posts.id 
+                  JOIN 
+                  user 
+                  ON comments.user_id=user.id';
+
+            $obj = $this->db->prepare($sql);
+
+            $obj->execute();
+
+            if ($obj->rowCount() > 0) {
+                $data = $obj->fetchAll(PDO::FETCH_OBJ);
+                return $data;
+            }
+
+            return false;
+        }
+
+        public function approveComment($id){
+            $sql='Update
+                  comments
+                  Set approved=1
+                  where id=:id';
+            $obj = $this->db->prepare($sql);
+
+            $obj->execute(array(
+                ':id'=>$id
+            ));
+        }
 
         # **********************
         # Comment feature SQL 
