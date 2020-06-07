@@ -11,7 +11,7 @@ class Category extends Controller {
         Session::set('activeCategory', $url);
         $categories = Session::get('categories');
         $search = isset($_GET['search']) ? $_GET['search'] : '';
-        $result = $this->model->getPostsByCategoryId($url, $search);
+        $result = $this->model->getPostsByCategory($url, $search);
         $this->view->posts = $result;
 
         $this->view->render('category/showAll');

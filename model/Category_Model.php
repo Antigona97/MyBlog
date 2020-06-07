@@ -48,7 +48,7 @@
             return false;
         }
         
-        public function getPostsByCategoryId($id, $search) {
+        public function getPostsByCategory($url, $search) {
             $sql = 'SELECT user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
             FROM user
             JOIN posts
@@ -57,12 +57,12 @@
             ON file.id = posts.file_id
             JOIN category
             ON category.id = posts.category_id
-            WHERE category.id = :id AND posts.header LIKE :search';
+            WHERE category.url = :url AND posts.header LIKE :search';
 
             $obj = $this->db->prepare($sql);
 
             $result = $obj->execute(array(
-                ":id" => $id,
+                ":url" => $url,
                 ':search' => '%'.$search.'%'
             ));
 
@@ -83,7 +83,7 @@
                   on comments.post_id=posts.id 
                   JOIN 
                   user 
-                  ON comments.user_id=user.id';
+                  ON comments.user_id=user.id and comments.approved=0';
 
             $obj = $this->db->prepare($sql);
 

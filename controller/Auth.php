@@ -6,6 +6,7 @@ class Auth extends Controller {
     
         //Get credentials from POST
         $user = $_POST;
+        $code=substr(md5(mt_rand()), 0, 4);
 
         // Get user by Mail
         $userEntry = $this->model->getUserFromEmail($user['email']);
@@ -56,8 +57,9 @@ class Auth extends Controller {
 
             $this->view->render('auth/register');
         } else {
-            Message::add('You are registered and can now log in');
-            $this->model->registerUser($user);
+            Message::add('A code is sent to your email.');
+            $this->sendCode($user['email'], $code);
+            $this->model->registerUser($user, $code);
 
             // Change location (goto login)
             header('Location: ' . URL . 'auth/login');
@@ -124,8 +126,8 @@ class Auth extends Controller {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = "antigonakoka@gmail.com";
-        $mail->Password = "ErliEmily072013212018";
+        $mail->Username = "email";
+        $mail->Password = "password";
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
         $mail->setFrom('antigonakoka@gmail.com');

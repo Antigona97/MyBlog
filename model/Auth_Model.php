@@ -2,14 +2,14 @@
 
 class Auth_Model extends Model {
  
-    public function registerUser($user) {
+    public function registerUser($user, $code) {
         $password = $user['password'];
 
         $hash = password_hash($password,PASSWORD_DEFAULT);
         
         $user['password'] = $hash;
 
-        $sql = 'INSERT INTO user (firstname, lastname, email, password) VALUES (:firstname, :lastname, :email, :password)';
+        $sql = 'INSERT INTO user (firstname, lastname, email, password, code) VALUES (:firstname, :lastname, :email, :password, :code)';
 
         $obj = $this->db->prepare($sql);
 
@@ -17,7 +17,8 @@ class Auth_Model extends Model {
             'firstname' => $user['firstname'],
             'lastname' => $user['lastname'],
             'email' => $user['email'],
-            'password' => $user['password']
+            'password' => $user['password'],
+            'code' => $code
         )); 
     }
 
