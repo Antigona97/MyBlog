@@ -4,6 +4,10 @@
         # **************
         # Create SEO Url
         # **************
+        public function getRelatedSlugs($url){
+            $posts=$this->model->getPosts();
+            var_dump($posts['url']);
+        }
         public  function geneterateSEOurl($url, $wordLimit=0)
         {
             $separator='-';
@@ -29,7 +33,6 @@
 
             return trim(trim($string, $separator));
         }
-
         # **************
         # Add New Post 
         # **************
@@ -48,7 +51,7 @@
 
             Message::add('Perfect! New post has been added to your blog');
 
-            header('Location: ' . URL . 'dashboard/add');
+            //header('Location: ' . URL . 'dashboard/add');
         }
 
         # Rendering the add Page - Only accessible if Admin status

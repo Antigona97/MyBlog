@@ -42,7 +42,7 @@
             <form class="mb-5" action="<?= URL ?>category/insertComment/<?= $getId = $item->id ?>#commentSubmitted" method="POST">
                 <div class="form-group">
                     <label for="comment">Write a comment</label>
-                    <input class="form-control" name="user_comment"id="comment" rows="3"></input>
+                    <textarea class="form-control" name="user_comment"id="comment" rows="3"></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit comment</button>
             </form>

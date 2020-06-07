@@ -1,4 +1,5 @@
 <?php
+
     class Category_Model extends Model {
 
         public function getPosts() {
@@ -136,14 +137,18 @@
             return false;
         }
 
-        public function userComment($user_comment, $postId) {
-            $sql = 'INSERT INTO comments(comment_content, user_id, post_id) VALUES (:comment_content, :user_id, :post_id)';
-            $obj = $this->db->prepare($sql);
-            $obj->execute(array(
-                ":comment_content" => $user_comment,
-                ':user_id' => Session::get('user')['id'],
-                ":post_id" => $postId
-            ));
+        public function userComment($user_comment, $url) {
+            $data=$this->getPostByUrl($url);
+            foreach ($data as $row){
+                $id=$row->id;
+                $sql = 'INSERT INTO comments(comment_content, user_id, post_id) VALUES (:comment_content, :user_id, :post_id)';
+                $obj = $this->db->prepare($sql);
+                $obj->execute(array(
+                    ":comment_content" => $user_comment,
+                    ':user_id' => Session::get('user')['id'],
+                    ":post_id" => $id
+                ));
+            }
         }
         
     }

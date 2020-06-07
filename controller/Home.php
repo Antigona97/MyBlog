@@ -1,6 +1,5 @@
 <?php
 
-
 class Home extends Controller {
 
 
@@ -15,8 +14,8 @@ class Home extends Controller {
 
     public function show($url) {
         # Get all Data needed for post
-        $data = Category_Model::getPostByUrl($url);
-        $comments = Category_Model::getAllCommentsByUrl($url);
+        $data = $this->model->getPostByUrl($url);
+        $comments = $this->model->getCommentsByUrl($url);
 
         # Passing it into the view
         $this->view->data = $data;

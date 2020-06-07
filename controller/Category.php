@@ -22,7 +22,7 @@ class Category extends Controller {
     # Comment functionality
     # **********************
 
-    public function insertComment() {
+    public function insertComment($url) {
         $comment = $_POST;
         # Split URL to get Id parameter
         $getId = explode("/", $_GET['url']);
@@ -30,10 +30,10 @@ class Category extends Controller {
         # User input into comment field
         $user_comment = $comment['user_comment'];
 
-        $this->model->userComment($user_comment, $postId);
+        $this->model->userComment($user_comment, $url);
 
         # Redirect to same page after comment has been submitted
-        header("Location: " . URL . "category/show/$postId");
+        header("Location: " . URL . "home/show/$url");
     }
 
     public function comments(){
