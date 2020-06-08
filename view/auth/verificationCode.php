@@ -21,14 +21,14 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="../../index2.html"><b>Admin</b>LTE</a>
+    <a><b>Admin</a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
       <h3 class="login-box-msg">Enter the security code</h3>
 
-      <form action="/account/verify" method="post">
+      <form action="<?=URL?>auth/verifyCode" method="post">
         <p>Check your email for a message with your code. Your code is with 4 numbers.</p>
         <div class="input-group mb-3">
           <input class="form-control" name="code" required placeholder="Verification code">
@@ -37,9 +37,6 @@
             </div>
           </div>
         </div>
-        <?php if(isset($_GET['field']) && $_GET['field']==='code'){
-             echo '<p>'.$_GET['message'].'</p>';
-        } ?>
         <div class="row">
           <div class="col-12">
             <button type="submit" class="btn btn-primary btn-block">Verify</button>

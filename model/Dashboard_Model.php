@@ -85,19 +85,18 @@
             return $result;
         }
 
-        public function editProfile($user_id, $post_firstname, $post_lastname, $post_email, $post_password) {
+        public function editProfile($user_id, $post_fullname, $post_email, $post_password) {
 
-            $sql = "UPDATE user SET firstname = :firstname, lastname = :lastname, email = :email WHERE id = :id";
+            $sql = "UPDATE user SET fullname=:fullname, email = :email WHERE id = :id";
             
             $executeArray = array(
-                ":firstname" => $post_firstname,
-                ":lastname" => $post_lastname,
+                ":fullname" => $post_fullname,
                 ":email" => $post_email,
                 ":id" => $user_id
             );
 
             if(!empty($post_password)) {
-                $sql = "UPDATE user SET firstname = :firstname, lastname = :lastname, email = :email, password = :password WHERE id = :id";
+                $sql = "UPDATE user SET fullname=:fullname, email = :email, password = :password WHERE id = :id";
                 $password = $post_password;
                 $hashPassword = password_hash($password, PASSWORD_DEFAULT);
                 $post_password = $hashPassword;
@@ -113,7 +112,7 @@
         }
     
         public function getPosts() {
-            $sql = 'SELECT user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
+            $sql = 'SELECT user.fullname, file.image, file.thumb, category.category_name, posts.*
                     FROM user
                     JOIN posts
                     ON user.id = posts.user_id
@@ -136,7 +135,7 @@
         }
     
         public function getPostByUrl($url) {
-            $sql = "SELECT user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
+            $sql = "SELECT user.fullname, file.image, file.thumb, category.category_name, posts.*
             FROM user
             JOIN posts
             ON user.id = posts.user_id
@@ -177,7 +176,7 @@
         }
 
         public function getPostsByEmail() {
-            $sql = 'SELECT user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
+            $sql = 'SELECT user.fullname, file.image, file.thumb, category.category_name, posts.*
                     FROM user
                     JOIN posts
                     ON user.id = posts.user_id
@@ -202,7 +201,7 @@
         }
 
         public function getUserById($id) {
-            $sql = 'SELECT u.id, u.firstname, u.lastname, u.email, u.login_attempts, u.permission_id, u.file_id, file.image, file.thumb, p.permission
+            $sql = 'SELECT u.id, u.fullname, u.email, u.login_attempts, u.permission_id, u.file_id, file.image, file.thumb, p.permission
             FROM user as u
             LEFT JOIN file ON file.id = u.file_id
             LEFT JOIN user_permission AS p ON u.permission_id = p.id
@@ -261,13 +260,12 @@
             return false;
         }
 
-        public function insertCategory($categoryName, $categoryParent, $url) {
-            $sql = "INSERT INTO category(category_name, parent, url) VALUES (:category_name, :parent, :url)";
+        public function insertCategory($categoryName, $url) {
+            $sql = "INSERT INTO category(category_name, url) VALUES (:category_name, :url)";
             $obj = $this->db->prepare($sql);
     
             $obj->execute(array(
                 ":category_name" => $categoryName,
-                ":parent" => $categoryParent,
                 ":url" => $url
             ));
     

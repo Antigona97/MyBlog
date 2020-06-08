@@ -62,7 +62,7 @@
                       </td>
                       <td>
                           <a>
-                              <?= $post->firstname . ' ' . $post->lastname?>
+                              <?= $post->fullname;?>
                           </a>
                       </td>
                       <td>

@@ -45,12 +45,6 @@
           <div class="card-body">
             <label>Category Name</label>
             <input name="category" class="form-control"/>
-            <label>Parent Category</label>
-            <select name="parent" class="custom-select">
-              <?php foreach ($this->data as $item): ?>
-                  <option value="<?= $item->id ?>"><?= $item->category_name ?></option>
-                <?php endforeach;?>
-            </select>
           </div>
           <!-- /.card-body -->
           <div class="card-footer">

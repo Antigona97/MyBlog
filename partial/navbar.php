@@ -42,7 +42,7 @@
             <li class="nav-item">
                 <a class="nav-link d-flex <?= (Session::get('controller_name') == 'Dashboard') ? 'active' : '' ?>" href="<?= URL ?>dashboard">
                     <img src="<?= (empty(Session::get('user')['image'])) ? DEFAULT_IMG : URL . Session::get('user')['image'] ?>" width="24" height="24" class="mr-2" alt="" style="border-radius: 50%">
-                    <div>Welcome <?= Session::get('user')['firstname'] ?></div>
+                    <div>Welcome <?= Session::get('user')['fullname'] ?></div>
                 </a>
             </li>
             <li class="nav-item">

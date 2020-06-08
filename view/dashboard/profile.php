@@ -1,20 +1,17 @@
 <?php
     $formClass = isset($this->error) ? 'error' : '';
 
-    $firstnameData = isset($this->formData['firstname']) ? $this->formData['firstname'] : '';
-    $lastnameData = isset($this->formData['lastname']) ? $this->formData['lastname'] : '';
+    $fullnameData = isset($this->formData['fullname']) ? $this->formData['fullname'] : '';
     $emailData = isset($this->formData['email']) ? $this->formData['email'] : '';
     $passwordData = isset($this->formData['password']) ? $this->formData['password'] : '';
     $confirmPasswordData = isset($this->formData['confirm_data']) ? $this->formData['confirm_data'] : '';
 
-    $firstnameErr = isset($this->error['firstname']) ? 'is-invalid' : '';
-    $lastNameErr = isset($this->error['lastname']) ? 'is-invalid' : '';
+    $fullnameErr = isset($this->error['fullname']) ? 'is-invalid' : '';
     $emailErr = isset($this->error['email']) ? 'is-invalid' : '';
     $passwordErr = isset($this->error['password']) ? 'is-invalid' : '';
     $confirmPasswordErr = isset($this->error['confirm_password']) ? 'is-invalid' : '';
 
     $nameErrorMsg = isset($this->error['name_err']) ? $this->error['name_err'] : '';
-    $lastNameErrorMsg = isset($this->error['lastname_err']) ? $this->error['lastname_err'] : '';
     $emailErrorMsg = isset($this->error['email_err']) ? $this->error['email_err'] : '';
     $passwordErrorMsg = isset($this->error['password_err']) ? $this->error['password_err'] : '';
     $confirmPasswordErrorMsg = isset($this->error['confirm_password_err']) ? $this->error['confirm_password_err'] : '';
@@ -66,14 +63,8 @@
 
                 <div class="form-group">
                     <label for="title">Firstname: <sup>*</sup></label>
-                    <input type="text" name="firstname" class="form-control form-control-lg <?= $firstnameErr ?>" value="<?= $this->userData['firstname'] ?>">
+                    <input type="text" name="firstname" class="form-control form-control-lg <?= $fullnameErr ?>" value="<?= $this->userData['fullname'] ?>">
                     <span class="invalid-feedback"><?= $nameErrorMsg ?></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="title">Lastname: <sup>*</sup></label>
-                    <input type="text" name="lastname" class="form-control form-control-lg <?= $lastNameErr ?>" value="<?= $this->userData['lastname'] ?>">
-                    <span class="invalid-feedback"><?= $lastNameErrorMsg ?></span>
                 </div>
 
                 <div class="form-group">

@@ -9,13 +9,12 @@ class Auth_Model extends Model {
         
         $user['password'] = $hash;
 
-        $sql = 'INSERT INTO user (firstname, lastname, email, password, code) VALUES (:firstname, :lastname, :email, :password, :code)';
+        $sql = 'INSERT INTO user (fullname, email, password, code) VALUES (:fullname, :email, :password, :code)';
 
         $obj = $this->db->prepare($sql);
 
         $obj->execute(array(
-            'firstname' => $user['firstname'],
-            'lastname' => $user['lastname'],
+            'fullname' => $user['fullname'],
             'email' => $user['email'],
             'password' => $user['password'],
             'code' => $code
@@ -36,9 +35,6 @@ class Auth_Model extends Model {
 
         //Remove hashed password from $userEntry
         unset($userEntry['password']);
-
-        //Add users fullname to $userEntry
-        $userEntry['fullname'] = $userEntry['firstname'] . ' ' . $userEntry['lastname'];
 
         //Verify password
         if (password_verify($password, $hash)) return $userEntry;
@@ -103,5 +99,35 @@ class Auth_Model extends Model {
         }
 
         return false;
+    }
+
+    public function verify($email, $code){
+        $sql='SELECT *
+        FROM user
+        WHERE email=:email and code=:code';
+
+        $obj=$this->db->prepare($sql);
+        $obj->execute(array(
+            'email'=>$email,
+            'code'=>$code
+        ));
+
+        if($obj->rowCount()>0){
+            $result = $obj->fetchAll();
+            return $result;
+        } return false;
+
+    }
+
+    public function updateStatus($email){
+        $sql='UPDATE user
+        SET status=1
+        WHERE email=:email';
+
+        $obj=$this->db->prepare($sql);
+
+        $obj->execute(array(
+            'email'=>$email
+        ));
     }
 }

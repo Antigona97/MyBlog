@@ -3,7 +3,7 @@
     class Category_Model extends Model {
 
         public function getPosts() {
-            $sql = 'SELECT user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
+            $sql = 'SELECT user.fullname, file.image, file.thumb, category.category_name, posts.*
                     FROM user
                     JOIN posts
                     ON user.id = posts.user_id
@@ -25,7 +25,7 @@
         }
         
         public function getPostByUrl($url) {
-            $sql = 'SELECT user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
+            $sql = 'SELECT user.fullname, file.image, file.thumb, category.category_name, posts.*
             FROM user
             JOIN posts
             ON user.id = posts.user_id
@@ -49,7 +49,7 @@
         }
         
         public function getPostsByCategory($url, $search) {
-            $sql = 'SELECT user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
+            $sql = 'SELECT user.fullname, file.image, file.thumb, category.category_name, posts.*
             FROM user
             JOIN posts
             ON user.id = posts.user_id
@@ -75,7 +75,7 @@
         }
 
         public function getComments(){
-            $sql='SELECT posts.header, user.firstname, user.lastname, comments.comment_content, comments.timestamp, comments.id
+            $sql='SELECT posts.header, user.fullname, comments.comment_content, comments.timestamp, comments.id
                   FROM 
                   comments 
                   JOIN 
@@ -115,8 +115,7 @@
 
         public function getAllCommentsByUrl($url) {
             $sql = 'SELECT
-            USER.firstname,
-            USER.lastname,
+            USER.fullname,
                 comments.*
             FROM
                 comments

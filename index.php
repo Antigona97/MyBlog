@@ -16,7 +16,8 @@ include 'lib/Message.php';
 
 include 'lib/File.php';
 
-
+include 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
+include 'vendor/phpmailer/phpmailer/src/SMTP.php';
 
 include 'lib/Database.php';
 include 'lib/Session.php';

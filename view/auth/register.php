@@ -1,3 +1,23 @@
+<?php
+
+    $formClass = isset($this->error) ? 'error' : '';
+
+    $fullname = isset($this->formData['fullname']) ? $this->formData['fullname'] : '';
+    $emailData = isset($this->formData['email']) ? $this->formData['email'] : '';
+    $passwordData = isset($this->formData['password']) ? $this->formData['password'] : '';
+    $confirmPasswordData = isset($this->formData['confirmpassword']) ? $this->formData['confirmpassword'] : '';
+
+    $fullnameErr = isset($this->error['fullname']) ? 'is-invalid' : '';
+    $emailErr = isset($this->error['email']) ? 'is-invalid' : '';
+    $passwordErr = isset($this->error['password']) ? 'is-invalid' : '';
+    $confirmPasswordErr = isset($this->error['confirmpassword']) ? 'is-invalid' : '';
+
+    $nameErrorMsg = isset($this->error['name_err']) ? $this->error['name_err'] : '';
+    $emailErrorMsg = isset($this->error['email_err']) ? $this->error['email_err'] : '';
+    $passwordErrorMsg = isset($this->error['password_err']) ? $this->error['password_err'] : '';
+    $confirmPasswordErrorMsg = isset($this->error['confirm_password_err']) ? $this->error['confirm_password_err'] : '';
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,37 +49,41 @@
 
       <form action="<?=URL?>auth/doRegister" method="post">
         <div class="input-group mb-3">
-          <input type="text" class="form-control form-control-lg <?= ($emailError) ? 'is-invalid' : '' ?>"  name="fullname" required placeholder="Full name">
+          <input type="text" class="form-control form-control-lg <?= ($fullnameErr) ? 'is-invalid' : '' ?>"  name="fullname" required placeholder="Full name" value="<?= $fullname ?>">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
             </div>
           </div>
         </div>
+          <span><?= $nameErrorMsg ?></span>
         <div class="input-group mb-3">
-          <input type="email" class="form-control form-control-lg <?= ($emailError) ? 'is-invalid' : '' ?>"  name="email" required placeholder="Email">
+          <input type="email" class="form-control form-control-lg <?= ($emailErr) ? 'is-invalid' : '' ?>"  name="email" required placeholder="Email" value="<?=$emailData?>">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
         </div>
+          <span><?= $emailErrorMsg ?></span>
         <div class="input-group mb-3">
-          <input type="password" class="form-control form-control-lg <?= ($emailError) ? 'is-invalid' : '' ?>"  name="password" required placeholder="Password">
+          <input type="password" class="form-control form-control-lg <?= ($passwordErr) ? 'is-invalid' : '' ?>"  name="password" required placeholder="Password" value="<?=$passwordData?>">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
           </div>
         </div>
+          <span><?= $passwordErrorMsg ?></span>
         <div class="input-group mb-3">
-          <input type="password" class="form-control form-control-lg <?= ($emailError) ? 'is-invalid' : '' ?>"  name="confirmpassword" required placeholder="Retype password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
+          <input type="password" class="form-control form-control-lg <?= ($confirmPasswordErr) ? 'is-invalid' : '' ?>"  name="confirmpassword" required placeholder="Retype password" value="<?=$confirmPasswordErr?>">
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-lock"></span>
+                </div>
             </div>
-          </div>
         </div>
+          <span><?= $confirmPasswordErrorMsg?></span>
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">

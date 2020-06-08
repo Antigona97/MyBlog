@@ -4,10 +4,6 @@
         # **************
         # Create SEO Url
         # **************
-        public function getRelatedSlugs($url){
-            $posts=$this->model->getPosts();
-            var_dump($posts['url']);
-        }
         public  function geneterateSEOurl($url, $wordLimit=0)
         {
             $separator='-';
@@ -51,18 +47,14 @@
 
             Message::add('Perfect! New post has been added to your blog');
 
-            //header('Location: ' . URL . 'dashboard/add');
+            header('Location: ' . URL . 'dashboard/add');
         }
 
         # Rendering the add Page - Only accessible if Admin status
         public function add() {
-            if(Session::get('user')['permission'] == "Admin") { 
-                $data = $this->model->getCategories();
-                $this->view->data = $data;
-                $this->view->render('dashboard/add-post');
-            } else {
-                header('Location: ' . URL . 'dashboard');
-            }
+            $data = $this->model->getCategories();
+            $this->view->data = $data;
+            $this->view->render('dashboard/add-post');
         }
 
         # ****************
@@ -111,10 +103,13 @@
 
         public function addCategory() {
             $getCategory = $_POST['category'];
-            $getParent=$_POST['parent'];
             $url=$this->geneterateSEOurl($getCategory);
-            $this->model->insertCategory($getCategory, $getParent, $url);
-            header("Location: " . URL . "dashboard/category");
+            var_dump($url);
+            if(Session::get('user')['permission']=='admin'){
+                $this->model->insertCategory($getCategory, $url);
+                header("Location: " . URL . "dashboard/category");
+            } else Message::add('You cannot create category.');
+            header('Location:'.URL.'dashboard/category');
         }
 
         # ******************
@@ -137,10 +132,9 @@
 
         public function doUpdateUser() {
             $post = $_POST;
-            $post_firstname = $_POST['firstname'];
+            $post_fullname = $_POST['fullname'];
             $user = Session::get('user');
             $user_id = $user['id'];
-            $post_lastname = $_POST['lastname'];
             $post_email = $_POST['email'];
             $post_password = $_POST['password'];
             $file_id = $_POST['file_id'];
@@ -166,7 +160,7 @@
             }
             
             $this->view->post = $post;
-            $this->model->editProfile($user_id, $post_firstname, $post_lastname, $post_email, $post_password);
+            $this->model->editProfile($user_id, $post_fullname, $post_email, $post_password);
             $updatedUser = $this->model->getUserById($user['id']);
             // Debug::add($updatedUser);
             Session::set("user", $updatedUser); 

@@ -25,46 +25,43 @@ class Auth extends Controller {
         } 
 
         // Validate Name
-        if(empty($user['firstname'])){
+        if(empty($user['fullname'])){
             $error['name_err'] = 'Please enter first name';
-        } 
-
-        // Validate Name
-        if(empty($user['lastname'])){
-            $error['lastname_err'] = 'Please enter last name';
-        } 
+        }
 
         // Validate Password
         if(empty($user['password'])){
             $error['password_err'] = 'Please enter password';
-        } elseif(strlen($user['password']) < 6){
-            $error['password_err'] = 'Password must be at least 6 characters';
+        } elseif(strlen($user['password']) < 8){
+            $error['password_err'] = 'Password must be at least 8 characters';
         }
 
         // Validate Confirm Password
-        if(empty($user['confirm_password'])){
+        if(empty($user['confirmpassword'])){
             $error['confirm_password_err'] = 'Please confirm password';
         } else {
-            if($user['password'] != $user['confirm_password']){
+            if($user['password'] != $user['confirmpassword']){
                 $error['confirm_password_err'] = 'Passwords do not match';
             }
         }
         
         // Check for error - if no error register
         if($error) {
+
             $this->view->error = $error;
             $this->view->formData = $user;
 
             $this->view->render('auth/register');
-        } else {
-            Message::add('A code is sent to your email.');
+        }else {
             $this->sendCode($user['email'], $code);
+
+            Message::add('A code is sent to your email.');
+            Session::set('email',$user['email']);
             $this->model->registerUser($user, $code);
 
             // Change location (goto login)
-            header('Location: ' . URL . 'auth/login');
+            header('Location: ' . URL . 'auth/verificationCode?email='.$user['email']);
         }
-        
     }
 
     public function doLogin() {
@@ -91,9 +88,12 @@ class Auth extends Controller {
             if($userEntry && $userEntry['login_attempts'] < MAXIMUM_LOGINS) {
                 Session::set('user', $userEntry);
                 Session::set('user_image', $userEntry['image']);
-                
+
                 // Resets login attempts to 0 if login successfull
                 $resetAttempts = $this->model->resetLoginAttempts($user['email']);
+                if($user['remember']){
+                    setcookie('password', $user['password'], time() + (86400 * 30), "/");
+                }
                 header('Location: ' . URL . 'home');
                 return;
             }
@@ -107,7 +107,7 @@ class Auth extends Controller {
                 return $this->login();
             }
 
-            $this->view->email_err = 'Username or Password wrong.';
+            $this->view->email_err = 'Email or Password wrong.';
             $this->login();
     }
 
@@ -122,7 +122,7 @@ class Auth extends Controller {
 
     public function sendCode($email, $code){
         //function that sends verification code
-        $mail=new PHPMailer();
+        $mail=new PHPMailer\PHPMailer\PHPMailer();
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
@@ -130,7 +130,7 @@ class Auth extends Controller {
         $mail->Password = "password";
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
-        $mail->setFrom('antigonakoka@gmail.com');
+        $mail->setFrom('password');
         $mail->addAddress($email);
         $mail->isHTML(true);
         $mail->Body = "Please verify your account with the code " . $code;
@@ -138,12 +138,20 @@ class Auth extends Controller {
 
     }
 
-    public function verificationCode(){
+    public function verifyCode(){
+
         $code=isset($_POST['code'])?$_POST['code']:'';
-        if(!empty($code)){
-            $this->verify($_SESSION['account'],$code);
-            header("Location:login");
+        $email=Session::get('email');
+
+        if(!empty($code) && !empty($email)){
+            if($this->model->verify($email,$code)){
+                $this->model->updateStatus($email);
+                header('Location: ' . URL . 'auth/login');
+            }
+            Message::add('Please verify your code');
+            header("Location".URL.'auth/login');
         }
+        header("Location:".URL.'auth/verificationCode');
     }
 
     public function recoverPassword(){
@@ -168,6 +176,10 @@ class Auth extends Controller {
     public function register() {
         //Render register view
         $this->view->render('auth/register');
+    }
+
+    public function verificationCode(){
+        $this->view->render('auth/verificationCode');
     }
     
     public function index() {
