@@ -28,7 +28,7 @@
 
     <!-- Main content -->
     <section class="content">
-
+        <?php if(Session::get('user')['permission'] == 'Admin'){?>
       <!-- Default box -->
       <form action="<?php echo URL; ?>dashboard/addCategory" method="POST">
         <div class="card">
@@ -56,6 +56,7 @@
           <!-- /.card-footer-->
         </div>
       </form>
+        <?php }?>
       <!-- /.card -->
 
     </section>

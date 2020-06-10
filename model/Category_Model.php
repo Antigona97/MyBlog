@@ -25,14 +25,13 @@
         }
         
         public function getPostByUrl($url) {
-            $sql = 'SELECT user.fullname, file.image, file.thumb, category.category_name, posts.*
+            $sql = 'SELECT user.fullname, file.image, file.thumb, posts.*
             FROM user
             JOIN posts
             ON user.id = posts.user_id
             JOIN file
             ON file.id = posts.file_id
-            JOIN category
-            ON category.id = posts.category_id WHERE posts.url = :url';
+            WHERE posts.url = :url';
     
             $obj = $this->db->prepare($sql);
     
@@ -55,9 +54,11 @@
             ON user.id = posts.user_id
             JOIN file
             ON file.id = posts.file_id
+            JOIN postcategory
+            ON postcategory.post_id = posts.id
             JOIN category
-            ON category.id = posts.category_id
-            WHERE category.url = :url AND posts.header LIKE :search';
+            ON postcategory.category_id=category.id
+            WHERE category.url = :url AND posts.status_id=3 AND posts.header LIKE :search';
 
             $obj = $this->db->prepare($sql);
 
@@ -71,6 +72,24 @@
                 return $data;
             }
 
+            return false;
+        }
+
+        public function getPostCategory(){
+            $sql='SELECT category.category_name, postcategory.*
+            FROM postcategory
+            JOIN category
+            ON category.id=postcategory.category_id
+            JOIN posts
+            ON posts.id=postcategory.post_id';
+
+            $obj = $this->db->prepare($sql);
+
+            $obj->execute();
+            if ($obj->rowCount() > 0) {
+                $data = $obj->fetchAll(PDO::FETCH_OBJ);
+                return $data;
+            }
             return false;
         }
 

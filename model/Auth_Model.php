@@ -121,7 +121,7 @@ class Auth_Model extends Model {
 
     public function updateStatus($email){
         $sql='UPDATE user
-        SET status=1
+        SET status_id=1
         WHERE email=:email';
 
         $obj=$this->db->prepare($sql);

@@ -18,14 +18,19 @@
     <section>
     <div class="card-columns">
         <?php if(is_array($this->post) || is_object($this->post)) {
-        foreach($this->post as $item) : ?>
+        foreach($this->post as $item) :?>
         <div class="card">
-            <a href="<?=URL?>category/show/<?=$item->id?>">
+            <a href="<?=URL?>home/show/<?=$item->url?>">
                 <img class="card-img-top" src="<?=$item->image?>" alt="Card image cap">
             </a>
             <div class="card-body">
-
-                <p class="card-text mb-0 text-muted"><small><?= $item->category_name ?></small></p>
+                <?php foreach ($this->category as $category) :?>
+                <a class="card-text mb-0 text-muted" href="<?=URL?>category/showCategory/<?=$category->url;?>">
+                        <?php if ($item->id == $category->post_id){
+                            echo $category->category_name;
+                        } "<br/>";
+                        endforeach; ?>
+                </a>
 
                 <h5 class="card-title"><?= $item->header ?></h5>
                 <p class="card-text"><?=substr($item->content,0,100)?>...<a href="<?= URL; ?>home/show/<?= $item->url; ?>">read more</a></p>
@@ -35,7 +40,7 @@
                     </div>
 
                     <div class="col">
-                        <p class="card-text pull-right"><small class="text-muted">Posted by: </br><?= $item->firstname . ' ' . $item->lastname?></small></p>
+                        <p class="card-text pull-right"><small class="text-muted">Posted by: </br><?= $item->fullname;?></small></p>
                     </div>
                 </div>
             </div>

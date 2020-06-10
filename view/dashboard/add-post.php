@@ -80,10 +80,9 @@
                 <div class="form-group">
                   <label>Status</label>
                   <select class="custom-select" name="status">
-                      <option selected disabled>Select one</option>
-                      <option>On Hold</option>
-                      <option>Canceled</option>
-                      <option>Success</option>
+                      <?php foreach ($this->status as $status): ?>
+                          <option value="<?= $status->id ?>"><?= $status->status;?></option>
+                      <?php endforeach;  ?>
                   </select>
                 </div>
                 <div  class="form-group">

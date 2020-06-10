@@ -35,15 +35,15 @@
         
         public function doAdd() {
             $post = $_POST;
-            $category_id = $post['category_id'];
             $userId = Session::get('user')['id'];
             $post_header = trim($post['header']);
             $post_content = trim($post['content']);
             $post_file = $_FILES['post_file'];
             $post_status=$post['status'];
+            $tags=$post['tags'];
             $url=$this->geneterateSEOurl($post_header);
             $uploadedFile = File::uploadImg($post_file);
-            $this->model->addPost($category_id, $userId, $post_header, $post_content, $uploadedFile, $post_status, $url);
+            $this->model->addPost($userId, $post_header, $post_content, $uploadedFile, $post_status, $tags, $url, $post['category_id']);
 
             Message::add('Perfect! New post has been added to your blog');
 
@@ -53,7 +53,10 @@
         # Rendering the add Page - Only accessible if Admin status
         public function add() {
             $data = $this->model->getCategories();
+            $status=$this->model->getStatus();
+
             $this->view->data = $data;
+            $this->view->status=$status;
             $this->view->render('dashboard/add-post');
         }
 
@@ -104,7 +107,7 @@
         public function addCategory() {
             $getCategory = $_POST['category'];
             $url=$this->geneterateSEOurl($getCategory);
-            var_dump($url);
+
             if(Session::get('user')['permission']=='admin'){
                 $this->model->insertCategory($getCategory, $url);
                 header("Location: " . URL . "dashboard/category");
@@ -177,7 +180,10 @@
                 Header("Location: " . URL . "home");
             } else {
                 $posts = $this->model->getPosts();
+                $category=$this->model->getPostCategory();
+
                 $this->view->posts = $posts;
+                $this->view->category=$category;
                 $this->view->render('dashboard/allposts');
             }
         }
@@ -187,15 +193,20 @@
                 Header("Location: " . URL . "home");
             } else {
                 $posts = $this->model->getPostByUrl($url);
+                $category=$this->model->getPostCategory();
+                $status=$this->model->getStatus();
+
                 $this->view->posts = $posts;
+                $this->view->category=$category;
+                $this->view->status=$status;
                 $this->view->render('dashboard/edit');
             }
         }
 
-        public function doEdit($id) {        
+        public function doEdit($url) {
             $post = $_POST;
-            $posts = $this->model->getPostById($id);
-            $post['id'] = $id;
+            $posts = $this->model->getPostByUrl($url);
+            $post['url'] = $url;
             $post['header'] = trim($post['header']);
             $post['content'] = trim($post['content']);
             $file_id = $_POST['file_id'];
@@ -206,7 +217,7 @@
                 return $this->edit();
             }
 
-            if (!$new_foto['error']) {
+            if (!empty($new_foto)) {
                 $uploadedFile = File::uploadImg($new_foto);
 
                 File::delete($posts[0]->thumb);
@@ -217,16 +228,18 @@
 
             $this->view->post = $post;
             $this->model->updatePost($post);
+
             Message::add('Post updated');
-            
             header('Location: ' . URL . 'home');
         }
 
         public function delete($url) {
             $post = $this->model->getPostByUrl($url);
+            $post_id=$post[0]->id;
             $file_id = $post[0]->file_id;
             
             $this->model->deleteFile($file_id);
+            $this->model->deletePostCategory($post_id);
             $this->model->deletePost($url);
             File::delete($post[0]->image);
             File::delete($post[0]->thumb);

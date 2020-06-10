@@ -11,7 +11,8 @@
             <div class="panel-body">
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <?php foreach ($this->comments as $comment) :?>
+                        <?php if(is_array($this->comments) || is_object($this->comments)){
+                        foreach ($this->comments as $comment) :?>
                         <div class="row">
                             <div class="col-xs-2 col-md-1">
                                 <img src="http://placehold.it/80" class="img-circle img-responsive" alt="" /></div>
@@ -19,7 +20,7 @@
                                 <div>
                                     <a><?=$comment->header;?></a>
                                     <div class="mic-info">
-                                        By: <a href="#"><?=$comment->firstname?><?=$comment->lastname;?></a> <?=$comment->timestamp?>
+                                        By: <a href="#"><?=$comment->fullname;?></a> <?=$comment->timestamp?>
                                     </div>
                                 </div>
                                 <div class="comment-text">
@@ -41,7 +42,7 @@
                                 </div>
                             </div>
                         </div>
-                        <?php endforeach;?>
+                        <?php endforeach; }?>
                     </li>
                 </ul>
                 <a href="#" class="btn btn-primary btn-sm btn-block" role="button"><span class="glyphicon glyphicon-refresh"></span> More</a>

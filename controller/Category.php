@@ -55,10 +55,12 @@ class Category extends Controller {
         # Get all Data needed for post
         $data = $this->model->getPostByUrl($url);
         $comments = $this->model->getAllCommentsByUrl($url);
+        $category=$this->model->getPostCategory();
 
         # Passing it into the view
         $this->view->data = $data;
         $this->view->comments = $comments;
+        $this->view->category=$category;
 
         $this->view->render('category/show');
     }

@@ -54,6 +54,7 @@ class File  {
 
         list($img_width, $img_height, $img_type) = getimagesize($img);
 
+
         switch($img_type){
             case IMAGETYPE_GIF:
                 $gd_img = imagecreatefromgif($img);
@@ -80,7 +81,7 @@ class File  {
         }
 
         $gd_thumb = imagecreatetruecolor($thumb_width, $thumb_height);
-
+        self::addWatermarkImage($thumb_path);
         imagecopyresampled($gd_thumb, $gd_img, 0, 0, 0, 0, $thumb_width, $thumb_height, $img_width, $img_height);
         imagejpeg($gd_thumb, $thumb_path, 90);
 
@@ -88,6 +89,45 @@ class File  {
         imagedestroy($gd_thumb);
 
         return true;
+    }
+
+    public static function addWatermarkImage($destination){
+        $fileType = pathinfo($destination,PATHINFO_EXTENSION);
+            // Load the stamp and the photo to apply the watermark to
+                $watermarkImagePath='uploads/MyBlog.png';
+
+                $watermarkImg = imagecreatefrompng($watermarkImagePath);
+
+                switch($fileType){
+                    case 'jpg':
+                        $im = imagecreatefromjpeg($destination);
+                        break;
+                    case 'jpeg':
+                        $im = imagecreatefromjpeg($destination);
+                        break;
+                    case 'png':
+                        $im = imagecreatefrompng($destination);
+                        break;
+                    default:
+                        $im = imagecreatefromjpeg($destination);
+                }
+
+                // Set the margins for the watermark
+                $marge_right = 10;
+                $marge_bottom = 10;
+
+                // Get the height/width of the watermark image
+                $sx = imagesx($watermarkImg);
+                $sy = imagesy($watermarkImg);
+
+                // Copy the watermark image onto our photo using the margin offsets and
+                // the photo width to calculate the positioning of the watermark.
+                imagecopy($im, $watermarkImg, imagesx($im) - $sx - $marge_right, imagesy($im) - $sy - $marge_bottom, 0, 0, imagesx($watermarkImg), imagesy($watermarkImg));
+
+
+                // Save image and free memory
+                imagejpeg($im, $destination, 90);
+                imagedestroy($im);
     }
 
     /**
@@ -124,7 +164,9 @@ class File  {
      * @author  nbe
      */
     public static function moveUploadedFile($file, $destination){
-        return (boolean) move_uploaded_file($file, $destination);
+        if(move_uploaded_file($file, $destination)){
+            return (boolean) self::addWatermarkImage($destination);
+        }
     }
 
     /**
@@ -176,7 +218,7 @@ class File  {
             $thumb_height   = $thumb[1];
             $thumb_width    = $thumb[0];
         }
-
+         var_dump(self::moveUploadedFile($temp_img_file, $img_path));
         if (!self::createFolder($img_dir))
             $error['upload']    = _('Missing User-Rights');
         if (!self::moveUploadedFile($temp_img_file, $img_path))
@@ -184,13 +226,7 @@ class File  {
         if (empty($thumb) && !self::createImgThumbnail($img_path, $thumb_path, $thumb_width, $thumb_height) || !empty($thumb) && !self::createImgThumbnail($img_path, $thumb_path, $thumb_width, $thumb_height))
             $error['upload']    = _('Error while generating Thumbnails');
 
-        if (!isset($error))
-            return array('name' => $temp_img_id, 'image' => $img_path, 'thumb' => $thumb_path, 'size' => $temp_img_size);
-        else {
-            return false;
-        }
-
-
+        return array('name' => $temp_img_id, 'image' => $img_path, 'thumb' => $thumb_path, 'size' => $temp_img_size);
     }
 
 

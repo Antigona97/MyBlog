@@ -28,7 +28,12 @@
     <?php foreach($data as $item) : ?>
         <h1 class="text-center mt-5"><?= $item->header; ?></h1>
         <div class="p-2 mb-3 text-center">
-            Article posted on <?= $item->timestamp ?> in Category <a class="btn btn-light" href="<?= URL ?>category/showCategory/<?= $item->category_id ?>"><?= $item->category_name; ?></a>
+            Article posted on <?= $item->timestamp ?> in Category <a class="btn btn-light">
+                <?php foreach ($this->category as $category) :
+                    if ($item->id == $category->post_id){
+                                echo $category->category_name;
+                    } "<br/>"; endforeach; ?>
+            </a>
         </div>
 
         <div class="landscape-img">
@@ -37,16 +42,6 @@
 
         <p class="mt-5"><?= $item->content; ?></p>
 
-        <!-- If user is logged in enable comment feature -->
-        <?php if($user) : ?>
-            <form class="mb-5" action="<?= URL ?>category/insertComment/<?= $getId = $item->id ?>#commentSubmitted" method="POST">
-                <div class="form-group">
-                    <label for="comment">Write a comment</label>
-                    <textarea class="form-control" name="user_comment"id="comment" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit comment</button>
-            </form>
-        <?php endif; ?>
     <?php endforeach; ?>
 
     <!-- Display message when no comments – don't delete if, otherwhise foreach error will occure -->

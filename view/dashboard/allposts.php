@@ -35,7 +35,7 @@
                       <th style="width: 6%">
                           Author
                       </th>
-                      <th>
+                      <th style="width: 6%">
                           Categories
                       </th>
                       <th style="width: 6%" class="text-center">
@@ -68,26 +68,23 @@
                       <td>
                           <span>
                               <a>
-                                  <?= $post->category_name ?>
+                                  <?php foreach ($this->category as $category) :
+                                      if ($post->id == $category->post_id){
+                                          echo $category->category_name;
+                                      } "<br/>"; endforeach; ?>
                               </a>
                           </span>
                       </td>
-                      <td class="project_progress">
-                          <div class="progress progress-sm">
-                              <div class="progress-bar bg-green" role="progressbar" aria-volumenow="57" aria-volumemin="0" aria-volumemax="100" style="width: 57%">
-                              </div>
-                          </div>
-                          <small>
-                              57% Complete
-                          </small>
+                      <td>
+                          <?=$post->status;?>
                       </td>
 
                       <td>
-                          <span></span>
+                          <?php $parts=explode(',',$post->tags);
+                          foreach($parts as $tag) :?>
+                              <span><?=$tag?></span>
+                          <?php endforeach;?>
                       </td>
-                      <td>
-                          <span></span>
-                       </td>
                       <td class="project-actions text-right">
                           <?php if(Session::get('user')['permission'] == "Admin"): ?>
                           <a href="<?= URL; ?>category/show/<?= $post->url; ?>" class="btn btn-primary btn-sm">
@@ -96,15 +93,18 @@
                               <i class="fas fa-pencil-alt"></i>Edit</a>
                           <a href="<?= URL; ?>dashboard/delete/<?= $post->url; ?>" class="btn btn-danger btn-sm">
                               <i class="fas fa-trash"></i>Delete</a>
-                          <?php elseif(Session::get('user')['permission'] == "Editor"): ?><td>
-                                <a href="<?= URL; ?>category/show/<?= $post->url; ?>" class="btn btn-dark">View</a></td>
-                                <a href="<?= URL; ?>dashboard/edit/<?= $post->url; ?>" class="btn btn-info btn-sm">
-                                    <i class="fas fa-pencil-alt"></i>Edit</a>
+                      </td>
+                          <?php elseif(Session::get('user')['permission'] == "Editor"): ?>
+                              <td>
+                                <a href="<?= URL; ?>category/show/<?= $post->url; ?>" class="btn btn-primary btn-sm">View</a>
+                                <a href="<?= URL; ?>dashboard/edit/<?= $post->url; ?>" class="btn btn-info btn-sm"><i class="fas fa-pencil-alt"></i>Edit</a>
+                              </td>
+                          <td>
                             <?php elseif(Session::get('user')['permission'] == "Guest"): ?>
                                 <a href="<?= URL; ?>category/show/<?= $post->url; ?>" class="btn btn-primary btn-sm">
                                     <i class="fas fa-folder"></i>View</a>
                             <?php endif; ?>
-                      </td>
+                          </td>
                   </tr>
                 <?php endforeach; }?>
               </tbody>

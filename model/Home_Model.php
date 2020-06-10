@@ -3,15 +3,16 @@
 
 class Home_Model extends Model {
 
+
     public function getPosts() {
-        $sql = 'SELECT user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
+        $sql = 'SELECT user.fullname, file.image, file.thumb, posts.*
                 FROM user
                 JOIN posts
                 ON user.id = posts.user_id
                 JOIN file
                 ON file.id = posts.file_id
-                JOIN category
-                ON category.id = posts.category_id ORDER BY timestamp DESC';
+                where posts.status_id=3
+                ORDER BY timestamp DESC';
         
         $obj = $this->db->prepare($sql);
         
@@ -26,14 +27,13 @@ class Home_Model extends Model {
     }
 
     public function getPostByUrl($url) {
-        $sql = 'SELECT user.firstname, user.lastname, file.image, file.thumb, category.category_name, posts.*
+        $sql = 'SELECT user.fullname, file.image, file.thumb, posts.*
             FROM user
             JOIN posts
             ON user.id = posts.user_id
             JOIN file
             ON file.id = posts.file_id
-            JOIN category
-            ON category.id = posts.category_id WHERE posts.url = :url';
+            WHERE posts.url = :url';
 
             $obj = $this->db->prepare($sql);
 
@@ -48,11 +48,17 @@ class Home_Model extends Model {
             return false;
     }
 
-    public function getPostsTotal() {
-        $sql = 'SELECT * FROM posts';
-        
+
+    public function getPostCategory(){
+        $sql='SELECT category.category_name, category.url, postcategory.*
+        FROM postcategory
+        JOIN category
+        ON category.id=postcategory.category_id
+        JOIN posts
+        ON posts.id=postcategory.post_id';
+
         $obj = $this->db->prepare($sql);
-        
+
         $obj->execute();
         if ($obj->rowCount() > 0) {
             $data = $obj->fetchAll(PDO::FETCH_OBJ);
@@ -62,55 +68,32 @@ class Home_Model extends Model {
         return false;
     }
 
-    public function paginationCount($limit, $offset) {
-        $sql = 'SELECT * FROM posts LIMIT = :limit OFFSET = :offset';
-
-        $obj = $this->db->prepare($sql);
-
-        $obj->execute(array(
-            ":limit" => $limit,
-            ":offset" => $offset
-        ));
-
-        // Do we have any results?
-        if ($obj->rowCount() > 0) {
-            // Define how we want to fetch the results
-            $data = $obj->fetchAll(PDO::FETCH_OBJ);
-            Debug::add($data);
-            $iterator = new IteratorIterator($data);
-
-            // Display the results
-            foreach ($iterator as $row) {
-                echo '<p>', $row['name'], '</p>';
-            }
-        }
-    }
 
     public function getCommentsByUrl($url){
+
         $post=$this->getPostByUrl($url);
-        foreach ($post as $row){
-            $id=$row->id;
-            $sql = 'SELECT
-            USER.firstname,
-            USER.lastname,
+
+            foreach ($post as $row){
+                $id=$row->id;
+                $sql = 'SELECT
+                USER.fullname,
                 comments.*
-            FROM
-                comments
-            LEFT JOIN USER ON USER.id = comments.user_id
-            WHERE post_id = :id and approved=1';
+                FROM comments
+                JOIN USER 
+                ON USER.id = comments.user_id
+                WHERE post_id = :id and approved=1';
+                $obj = $this->db->prepare($sql);
 
-            $obj = $this->db->prepare($sql);
-
-            $obj->execute(array(
+                $obj->execute(array(
                 ":id" => $id
-            ));
+                ));
 
-            if ($obj->rowCount() > 0) {
-                $data = $obj->fetchAll(PDO::FETCH_OBJ);
-                return $data;
+                if ($obj->rowCount() > 0) {
+                    $data = $obj->fetchAll(PDO::FETCH_OBJ);
+                    return $data;
+                }
+                return false;
             }
-            return false;
-        }
     }
 
 }

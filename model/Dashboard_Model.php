@@ -1,7 +1,7 @@
 <?php
     class Dashboard_Model extends Model {
 
-        public function addPost($category_id, $userId, $post_header, $post_content, $uploadedFile, $post_status, $url) {
+        public function addPost($userId, $post_header, $post_content, $uploadedFile, $post_status, $tags, $url, $category) {
 
             // 1. Step: insert File ----------------------------------------------------------------------------------------------
             $sql = 'INSERT INTO file (name, image, thumb, size) VALUES (:name, :image, :thumb, :size)';
@@ -21,7 +21,7 @@
     
             // 2. Step: insert Post ----------------------------------------------------------------------------------------------
     
-            $sql = 'INSERT INTO posts(header, content, status, url, user_id, file_id, category_id) VALUES (:header, :content,:status, :url, :user_id, :file_id, :category_id)';
+            $sql = 'INSERT INTO posts(header, content, status_id, tags, url, user_id, file_id) VALUES (:header, :content, :status, :tags, :url, :user_id, :file_id)';
             
             $obj = $this->db->prepare($sql);
             
@@ -29,13 +29,13 @@
                 ":header" => $post_header,
                 ":content" => $post_content,
                 ":status"=>$post_status,
+                ":tags" => $tags,
                 ":url" => $url,
                 ":user_id" => $userId,
                 ":file_id" => $file_id,
-                ":category_id" => $category_id,
             ));
-    
-            return $result1 && $result2;
+           $id=$this->db->lastInsertId();
+           $this->addPostCategory($category, $id);
         }
 
         public function uploadUserImage($userId, $uploadedFile) {
@@ -112,14 +112,18 @@
         }
     
         public function getPosts() {
-            $sql = 'SELECT user.fullname, file.image, file.thumb, category.category_name, posts.*
+            $sql = 'SELECT user.fullname, file.image, file.thumb, category.category_name,status.status, posts.*
                     FROM user
                     JOIN posts
                     ON user.id = posts.user_id
                     JOIN file
                     ON file.id = posts.file_id
+                    JOIN postcategory
+                    ON postcategory.post_id = posts.id
                     JOIN category
-                    ON category.id = posts.category_id
+                    ON postcategory.category_id=category.id
+                    JOIN status
+                    ON status.id=posts.status_id
                     ORDER BY timestamp DESC';
             
             $obj = $this->db->prepare($sql);
@@ -135,15 +139,15 @@
         }
     
         public function getPostByUrl($url) {
-            $sql = "SELECT user.fullname, file.image, file.thumb, category.category_name, posts.*
+            $sql = "SELECT user.fullname, file.image, file.thumb, status.status, posts.*
             FROM user
             JOIN posts
             ON user.id = posts.user_id
             JOIN file
             ON file.id = posts.file_id
-            JOIN category
-            ON category.id = posts.category_id
-            WHERE url=:url";
+            JOIN status
+            ON status.id = posts.status_id
+            WHERE posts.url=:url";
 
             $obj = $this->db->prepare($sql);
     
@@ -235,14 +239,16 @@
         }
 
         public function updatePost($data) {
-            $sql = "UPDATE posts SET header = :header, content = :content WHERE id = :id";
+            $sql = "UPDATE posts SET header = :header, content = :content, status_id=:status, tags=:tags WHERE url = :url";
     
             $obj = $this->db->prepare($sql);
     
             $obj->execute(array(
-                ":id" => $data["id"],
+                ":url" => $data["url"],
                 ":header" => $data["header"],
-                ":content" => $data["content"]
+                ":content" => $data["content"],
+                ":status" => $data["status"],
+                ":tags" => $data["tags"]
             ));
         }
     
@@ -257,6 +263,40 @@
                 return $data;
             }
     
+            return false;
+        }
+
+        public function addPostCategory($category, $post){
+            $sql='INSERT INTO `postcategory`(`post_id`, `category_id`) VALUES (:post_id, :category_id)';
+
+            $obj = $this->db->prepare($sql);
+
+            $obj->execute(array(
+                ":post_id" => $post,
+                ":category_id" => $category
+            ));
+
+            if($obj->rowCount() > 0) {
+                $data = $obj->fetchAll(PDO::FETCH_OBJ);
+                return $data;
+            }
+
+            return false;
+        }
+
+        public function getStatus(){
+
+            $sql='SELECT * FROM status';
+
+            $obj = $this->db->prepare($sql);
+
+            $obj->execute();
+
+            if($obj->rowCount() > 0) {
+                $data = $obj->fetchAll(PDO::FETCH_OBJ);
+                return $data;
+            }
+
             return false;
         }
 
@@ -309,6 +349,26 @@
             return $result;
         }
 
+        public function getPostCategory(){
+            $sql='SELECT category.category_name, postcategory.*
+            FROM postcategory
+            JOIN category
+            ON category.id=postcategory.category_id
+            JOIN posts
+            ON posts.id=postcategory.post_id';
+
+            $obj = $this->db->prepare($sql);
+
+            $obj->execute();
+
+            if ($obj->rowCount() > 0) {
+                $data = $obj->fetchAll(PDO::FETCH_OBJ);
+                return $data;
+            }
+
+            return false;
+        }
+
         # ********************
         # Ban/Unban Functions
         # ********************
@@ -349,6 +409,18 @@
                 ':file_id' =>  $file_id
             ));
     
+            return $result;
+        }
+
+        public function deletePostCategory($post_id){
+            $sql = 'DELETE FROM postcategory WHERE post_id = :post_id LIMIT 1;';
+
+            $obj = $this->db->prepare($sql);
+
+            $result = $obj->execute(array(
+                ':post_id' => $post_id
+            ));
+
             return $result;
         }
 

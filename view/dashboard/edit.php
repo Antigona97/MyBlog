@@ -33,7 +33,7 @@
     <!-- Main content -->
     <section class="content">
          <?php foreach($this->posts as $post) : ?>
-      <form action="<?php echo URL; ?>dashboard/doEdit/<?= $post->id ?>" method="POST" enctype="multipart/form-data">
+      <form action="<?php echo URL; ?>dashboard/doEdit/<?= $post->url ?>" method="POST" enctype="multipart/form-data">
         <div class="row">
           <div class="col-md-9">
             <div class="card card-primary">
@@ -73,15 +73,15 @@
                 <div class="form-group">
                   <label>Status</label>
                   <select class="custom-select" name="status">
-                      <option selected><?=$post->status;?></option>
-                      <option>On Hold</option>
-                      <option>Canceled</option>
-                      <option>Success</option>
+                      <?php foreach ($this->status as $row) :?>
+                          <option value="<?=$row->id?>" <?=$post->status_id == $row->id? 'selected' : false; ?>><?=$row->status; ?>
+                          </option>
+                      <?php endforeach;?>
                   </select>
                 </div>
                 <div  class="form-group">
                   <label for="inputTags">Tags</label>
-                  <input name='tags' type="text" id="inputTags" class="form-control"/>
+                  <input name='tags' type="text" id="inputTags" value="<?=$post->tags;?>" class="form-control"/>
                 </div>
               </div>
               <!-- /.card-body -->
@@ -100,8 +100,10 @@
                 <div class="form-group">
                   <label for="inputCategories">All Categories</label><br/>
                   <select style="width: 100%" id="inputCategories" name="category_id" multiple>
-                      <?php foreach ($this->posts as $post): ?>
-                          <option value="<?= $post->id ?>"><?= $post->category_name ?></option>
+                      <?php foreach ($this->category as $category): ?>
+                          <option value="<?=$category->id; ?>" <?=$post->id == $category->post_id? 'selected' : false; ?>>
+                              <?=$category->category_name;?>
+                          </option>
                       <?php endforeach; ?>
                   </select>
                 </div>
@@ -139,7 +141,7 @@
         <div class="row">
           <div class="col-12">
             <a href="#" class="btn btn-secondary">Cancel</a>
-            <input type="submit" value="Create new Post" class="btn btn-success float-right">
+            <input type="submit" value="Update" class="btn btn-success float-right">
           </div>
         </div>
       </form>
