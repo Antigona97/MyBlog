@@ -1,9 +1,13 @@
-<?php include 'partial/sidebar.php'; ?>
+<body class="hold-transition sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+<?php include 'partial/layout/top-nav.html'; ?>
+<?php include 'partial/layout/sidebar-menu.html'; ?>
 
     <div class="col">
-        <div class="container">
+        <div class="content-wrapper">
             <!-- Breadcrumbs-->
-            <h2>Dashboard</h2>
+            <h2>User Management</h2>
 
             <!-- DataTables Example -->
             <div class="table-responsive">
@@ -65,6 +69,7 @@
             </div>
         </div>
     </div>
+</div>
 
 
                 

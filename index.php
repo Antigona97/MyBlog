@@ -11,7 +11,6 @@ if (DEBUG_MODE) {
     error_reporting(E_ALL);
 }
 
-
 include 'lib/Message.php';
 
 include 'lib/File.php';
@@ -27,6 +26,7 @@ Session::start();
 include 'lib/Model.php';
 include 'lib/View.php';
 include 'lib/Controller.php';
+
 
 // Load Debug class
 include 'lib/Debug.php';

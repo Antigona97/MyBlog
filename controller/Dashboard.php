@@ -27,7 +27,24 @@
             }
             $string = strtolower($string);
 
-            return trim(trim($string, $separator));
+            $url=trim(trim($string, $separator));
+
+            $allUrls=$this->model->getUrl($url);
+
+            foreach ($allUrls as $row){
+                $data[]=$row['url'];
+            }
+            //controlls  if generates url exists in db
+
+            if(in_array($url, $data)){
+                $count = 0;
+                while( in_array( ($url . '-' . ++$count ), $data) );
+
+                $slug = $url . '-' . $count;
+
+                return $slug;
+            }
+            return $url;
         }
         # **************
         # Add New Post 

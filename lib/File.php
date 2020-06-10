@@ -218,7 +218,7 @@ class File  {
             $thumb_height   = $thumb[1];
             $thumb_width    = $thumb[0];
         }
-         var_dump(self::moveUploadedFile($temp_img_file, $img_path));
+
         if (!self::createFolder($img_dir))
             $error['upload']    = _('Missing User-Rights');
         if (!self::moveUploadedFile($temp_img_file, $img_path))

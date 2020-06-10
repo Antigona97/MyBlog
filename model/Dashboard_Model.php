@@ -369,6 +369,25 @@
             return false;
         }
 
+        public function getUrl($url){
+            $sql='SELECT url
+            FROM posts
+            where url like concat(:url, "%")';
+
+            $obj = $this->db->prepare($sql);
+
+            $obj->execute(array(
+                ':url'=> $url
+            ));
+
+            if ($obj->rowCount() > 0) {
+                $data = $obj->fetchAll();
+                return $data;
+            }
+
+            return false;
+        }
+
         # ********************
         # Ban/Unban Functions
         # ********************
