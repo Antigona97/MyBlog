@@ -105,7 +105,7 @@
               <div class="card-body">
                 <div class="form-group">
                   <label for="inputCategories">All Categories</label><br/>
-                  <select style="width: 100%" id="inputCategories" name="category_id" multiple>
+                  <select style="width: 100%" id="inputCategories" name="category_id[]" multiple>
                         <?php foreach ($this->data as $item): ?>
                           <option value="<?= $item->id ?>"><?= $item->category_name;?></option>
                         <?php endforeach;  ?>

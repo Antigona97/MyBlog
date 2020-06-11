@@ -5,7 +5,7 @@
 <script src="<?=URL?>plugins/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js"></script>
 <script src="<?=URL?>plugins/select2/js/select2.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button)
@@ -46,15 +46,18 @@
     $('#deletePost').on('click', function (event) {
         event.preventDefault();
         const url = $(this).attr('href');
+        console.log(url);
         swal({
-            title: 'Are you sure?',
-            text: 'This record and it`s details will be permanantly deleted!',
-            showCloseButton: true,
-            showCancelButton:true,
-            icon: 'warning'
-        }).then(function(value) {
-            if (value) {
-                form.submit();
+            title: "Are you sure?", 
+            text: "Once deleted, you will not be able to recover!",
+            icon: "warning", 
+            buttons: true, 
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                window.location.href=url;
+            } else {
+                swal("Your imaginary file is safe!");
             }
         });
     });

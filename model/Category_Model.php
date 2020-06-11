@@ -94,7 +94,7 @@
         }
 
         public function getComments(){
-            $sql='SELECT posts.header, user.fullname, comments.comment_content, comments.timestamp, comments.id
+            $sql='SELECT posts.header, user.fullname, comments.comment_content, comments.timestamp, comments.id, count(comments.id) as nr_comment
                   FROM 
                   comments 
                   JOIN 

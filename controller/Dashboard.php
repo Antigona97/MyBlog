@@ -271,6 +271,15 @@
             $this->view->render('dashboard/allUserPosts');   
         }
 
+        public function gallery(){
+            $files=$this->model->getAllFiles();
+            $category=$this->model->getCategories();
+
+            $this->view->files=$files;
+            $this->view->data=$category;
+            $this->view->render('dashboard/gallery');
+        }
+
         public function index() {
             if(!(Session::get('user'))) {
                 Header("Location: " . URL . "home");

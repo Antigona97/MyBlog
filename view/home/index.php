@@ -21,7 +21,7 @@
         foreach($this->post as $item) :?>
         <div class="card">
             <a href="<?=URL?>home/show/<?=$item->url?>">
-                <img class="card-img-top" src="<?=$item->image?>" alt="Card image cap">
+                <img class="card-img-top" src="<?=$item->thumb?>" alt="Card image cap">
             </a>
             <div class="card-body">
                 <?php foreach ($this->category as $category) :?>

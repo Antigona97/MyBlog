@@ -69,16 +69,8 @@ class File  {
                 return false;
         }
 
-        $img_ratio      = $img_width/ $img_height;
-        $thumb_ratio    = $width / $height;
-
-        if($thumb_ratio > $img_ratio){
-            $thumb_height   = $height;
-            $thumb_width    = (int) $height * $img_ratio;
-        } else {
-            $thumb_height   = (int) $width / $img_ratio;
-            $thumb_width    = $width;
-        }
+        $thumb_width='200';
+        $thumb_height='200';
 
         $gd_thumb = imagecreatetruecolor($thumb_width, $thumb_height);
         self::addWatermarkImage($thumb_path);

@@ -121,6 +121,7 @@
                 </div>
               </div>
               <div class="card-body">
+                  <input type="hidden" name="file_id" value="<?= $post->file_id ?>">
                 <div class="form-group inputDnD">
                     <label for="title">Current Image:</label>
                     <div>
@@ -131,7 +132,7 @@
               <div class="card-body">
                 <div class="form-group">
                     <label for="title">Image Upload: <sup>*</sup></label>
-                    <input type="file" class="form-control-file text-upload font-weight-bold" name="post_file" id="inputFile" onchange="readUrl(this)" data-title="Click or Drag and drop a file">
+                    <input type="file" class="form-control-file text-upload font-weight-bold" name="new_foto" id="inputFile" onchange="readUrl(this)" data-title="Click or Drag and drop a file">
                 </div>
               </div>
               <!-- /.card-body -->

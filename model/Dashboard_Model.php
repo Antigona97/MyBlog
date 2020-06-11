@@ -112,16 +112,12 @@
         }
     
         public function getPosts() {
-            $sql = 'SELECT user.fullname, file.image, file.thumb, category.category_name,status.status, posts.*
+            $sql = 'SELECT user.fullname, file.image, file.thumb, status.status, posts.*, count(posts.id) as nr_post
                     FROM user
                     JOIN posts
                     ON user.id = posts.user_id
                     JOIN file
                     ON file.id = posts.file_id
-                    JOIN postcategory
-                    ON postcategory.post_id = posts.id
-                    JOIN category
-                    ON postcategory.category_id=category.id
                     JOIN status
                     ON status.id=posts.status_id
                     ORDER BY timestamp DESC';
@@ -163,7 +159,21 @@
             return false;
         }
 
-        public function getFileById($id) {
+        public function getAllFiles(){
+            $sql = "SELECT * FROM file";
+            $obj = $this->db->prepare($sql);
+
+            $obj->execute();
+
+            if($obj->rowCount() > 0) {
+                $data = $obj->fetchAll(PDO::FETCH_OBJ);
+                return $data;
+            }
+
+            return false;
+        }
+
+        public function getFile($id) {
             $sql = "SELECT * FROM file WHERE id = :id";
             $obj = $this->db->prepare($sql);
 
@@ -267,21 +277,23 @@
         }
 
         public function addPostCategory($category, $post){
-            $sql='INSERT INTO `postcategory`(`post_id`, `category_id`) VALUES (:post_id, :category_id)';
+            foreach ($category as $cat) {
+                $sql = 'INSERT INTO `postcategory`(`post_id`, `category_id`) VALUES (:post_id, :category_id)';
 
-            $obj = $this->db->prepare($sql);
+                $obj = $this->db->prepare($sql);
 
-            $obj->execute(array(
-                ":post_id" => $post,
-                ":category_id" => $category
-            ));
+                $obj->execute(array(
+                    ":post_id" => $post,
+                    ":category_id" => $cat
+                ));
 
-            if($obj->rowCount() > 0) {
-                $data = $obj->fetchAll(PDO::FETCH_OBJ);
-                return $data;
+//                if ($obj->rowCount() > 0) {
+//                    $data = $obj->fetchAll(PDO::FETCH_OBJ);
+//                    return $data;
+//                }
+//
+//                return false;
             }
-
-            return false;
         }
 
         public function getStatus(){
